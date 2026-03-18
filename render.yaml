@@ -1,5 +1,11 @@
 # Render Blueprint
 
+databases:
+  - name: kolachi-lms-db
+    plan: free
+    databaseName: kolachi_lms
+    ipAllowList: []
+
 services:
   - type: web
     name: kolachi-tutor-lms
@@ -7,7 +13,7 @@ services:
     region: oregon
     plan: free
     buildCommand: npm install && npm run build
-    startCommand: node dist/server.js
+    startCommand: npm start
     healthCheckPath: /
     envVars:
       - key: NODE_ENV
@@ -26,9 +32,3 @@ services:
         value: admin@kolachi.edu.pk
       - key: ADMIN_PASSWORD
         value: admin123
-
-databases:
-  - name: kolachi-lms-db
-    plan: free
-    databaseName: kolachi_lms
-    ipAllowList: []
