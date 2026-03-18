@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolachi Tutors - Learning Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+  <div id="particles"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="#home" class="logo" onclick="showPage('home')">
+      <img src="images/logo.png" alt="Kolachi Tutors Logo" style="height: 40px; vertical-align: middle; margin-right: 5px;"> Kolachi<span>Tutors</span>
+    </a>
+    
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#home" onclick="showPage('home')">Home</a></li>
+        <li><a href="#courses" onclick="showPage('courses')">Courses</a></li>
+        <li><a href="#questions" onclick="showPage('questions')">AI Questions</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="user-menu">
+      <div class="auth-buttons">
+        <a href="#login" class="btn btn-secondary">Login</a>
+        <a href="#student-register" class="btn btn-primary">Sign Up</a>
+      </div>
+      <button class="mobile-menu-btn">☰</button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <nav class="mobile-nav">
+    <a href="#home" onclick="showPage('home')">Home</a>
+    <a href="#courses" onclick="showPage('courses')">Courses</a>
+    <a href="#questions" onclick="showPage('questions')">AI Questions</a>
+    <a href="#about">About</a>
+    <a href="#login" onclick="showPage('login')">Login</a>
+  </nav>
+
+  <!-- Home Page -->
+  <div id="home" class="page active">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to Kolachi Tutors</h1>
+        <p>Experience the future of learning with AI-powered education. Join thousands of students achieving their academic goals with personalized guidance from expert teachers.</p>
+        <div class="hero-buttons">
+          <a href="#student-register" class="btn-3d">Get Started</a>
+          <a href="#teacher-register" class="btn btn-secondary">Become a Teacher</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2 class="section-title">Why Choose <span>Kolachi Tutors</span>?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎓</div>
+          <h3>Expert Teachers</h3>
+          <p>Learn from qualified teachers assigned to help you excel in your chosen subjects.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI-Powered Learning</h3>
+          <p>Get instant answers to your questions with our advanced AI question-answering system.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📥</div>
+          <h3>Course Downloads</h3>
+          <p>Access and download course materials anytime, anywhere for offline learning.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Progress Tracking</h3>
+          <p>Monitor your learning progress with detailed dashboards and performance metrics.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Subject Selection</h3>
+          <p>Choose from a wide range of subjects and customize your learning path.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>24/7 Support</h3>
+          <p>Get help anytime with our AI assistant available around the clock.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Login Page -->
+  <div id="login" class="page">
+    <div class="form-container">
+      <div class="form-card">
+        <h2>Welcome <span>Back</span></h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="login-email" required placeholder="Enter your email" value="admin@kolachi.edu.pk">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" required placeholder="Enter your password" value="admin123">
+          </div>
+          <button type="submit" class="btn-3d" style="width: 100%;">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+          Don't have an account? <a href="#student-register" style="color: var(--accent-orange);">Sign Up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Registration -->
+  <div id="student-register" class="page">
+    <div class="form-container">
+      <div class="form-card">
+        <h2>Student <span>Registration</span></h2>
+        <form id="student-register-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="student-name" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="student-email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="student-phone" placeholder="Enter your phone number">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="student-password" required placeholder="Create a password">
+          </div>
+          <div class="form-group">
+            <label>Select Your Subjects</label>
+            <div class="subject-select" id="subject-select">
+              <!-- Subjects will be loaded dynamically -->
+            </div>
+          </div>
+          <button type="submit" class="btn-3d" style="width: 100%;">Create Account</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+          Already have an account? <a href="#login" style="color: var(--accent-orange);">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Registration -->
+  <div id="teacher-register" class="page">
+    <div class="form-container">
+      <div class="form-card">
+        <h2>Teacher <span>Registration</span></h2>
+        <form id="teacher-register-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="teacher-name" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="teacher-email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="teacher-phone" placeholder="Enter your phone number">
+          </div>
+          <div class="form-group">
+            <label>Qualifications</label>
+            <textarea id="teacher-qualifications" placeholder="List your academic qualifications"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Bio / About You</label>
+            <textarea id="teacher-bio" placeholder="Tell students about yourself"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="teacher-password" required placeholder="Create a password">
+          </div>
+          <button type="submit" class="btn-3d" style="width: 100%;">Register as Teacher</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Welcome, <span id="user-name">User</span>!</h2>
+        <div class="tabs">
+          <button class="tab active" onclick="switchDashboardTab('overview')">Overview</button>
+          <button class="tab" onclick="switchDashboardTab('courses')">My Courses</button>
+          <button class="tab" onclick="switchDashboardTab('questions')">My Questions</button>
+        </div>
+      </div>
+
+      <div id="dashboard-stats">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="stat-students">0</div>
+            <div class="stat-label">Students</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-teachers">0</div>
+            <div class="stat-label">Teachers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-courses">0</div>
+            <div class="stat-label">Courses</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-questions">0</div>
+            <div class="stat-label">Questions</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="my-subjects" class="features-grid">
+        <!-- Subjects will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Page -->
+  <div id="courses" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Course <span>Library</span></h2>
+        <button class="btn btn-primary" onclick="showUploadModal()" id="upload-btn">Upload Course</button>
+      </div>
+
+      <div class="courses-grid" id="courses-grid">
+        <!-- Courses will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Questions Page -->
+  <div id="questions" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>AI Question <span>Search</span></h2>
+      </div>
+
+      <div class="questions-container">
+        <div class="search-box">
+          <input type="text" id="ai-search-input" placeholder="Ask any question...">
+          <select id="ai-search-subject">
+            <option value="">All Subjects</option>
+          </select>
+          <button class="btn btn-primary" onclick="handleAISearch()">Ask AI</button>
+        </div>
+
+        <div id="ai-results">
+          <!-- Results will appear here -->
+        </div>
+
+        <h3 style="margin: 40px 0 20px;">Your Question History</h3>
+        <div id="question-history">
+          <!-- History will be loaded -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Page -->
+  <div id="admin" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Admin <span>Panel</span></h2>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchAdminTab('assignments')">Teacher Assignments</button>
+        <button class="tab" onclick="switchAdminTab('users')">Manage Users</button>
+        <button class="tab" onclick="switchAdminTab('courses')">All Courses</button>
+      </div>
+
+      <div id="admin-content">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Assigned Teacher</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="assignments-body">
+            <!-- Assignments loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Kolachi Tutors</h4>
+        <p style="color: var(--text-secondary);">Empowering students with AI-driven education for a brighter future.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#questions">AI Questions</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@kolachi.edu.pk">info@kolachi.edu.pk</a></li>
+          <li><a href="tel:+923001234567">+92 300 1234567</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Kolachi Tutors. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Upload Modal -->
+  <div class="modal" id="upload-modal">
+    <div class="modal-content">
+      <h3>Upload Course</h3>
+      <form id="upload-form">
+        <div class="form-group">
+          <label>Course Title</label>
+          <input type="text" id="course-title" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="course-description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="course-subject" required></select>
+        </div>
+        <div class="form-group">
+          <label>Course File</label>
+          <div class="upload-zone" id="upload-zone">
+            <p>Drag & drop files here or click to browse</p>
+            <input type="file" id="course-file" style="display: none;">
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn btn-primary">Upload</button>
+          <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Assign Teacher Modal -->
+  <div class="modal" id="assign-modal">
+    <div class="modal-content">
+      <h3>Assign Teacher</h3>
+      <form id="assign-form">
+        <input type="hidden" id="assign-student-email">
+        <input type="hidden" id="assign-subject-id">
+        <div class="form-group">
+          <label>Select Teacher</label>
+          <select id="assign-teacher" required></select>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn btn-primary">Assign</button>
+          <button type="button" class="btn btn-secondary" onclick="closeAssignModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Page specific initialization
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load subjects for registration
+      loadSubjectsForRegistration();
+      loadSubjectsForSelect();
+      loadCourses();
+      
+      // Login form handler
+      document.getElementById('login-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        login(email, password);
+      });
+
+      // Student registration handler
+      document.getElementById('student-register-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const selectedSubjects = Array.from(document.querySelectorAll('#subject-select input:checked')).map(cb => cb.value);
+        
+        const formData = {
+          fullName: document.getElementById('student-name').value,
+          email: document.getElementById('student-email').value,
+          phone: document.getElementById('student-phone').value,
+          password: document.getElementById('student-password').value,
+          subjects: selectedSubjects
+        };
+        
+        registerStudent(formData);
+      });
+
+      // Teacher registration handler
+      document.getElementById('teacher-register-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = {
+          fullName: document.getElementById('teacher-name').value,
+          email: document.getElementById('teacher-email').value,
+          phone: document.getElementById('teacher-phone').value,
+          qualifications: document.getElementById('teacher-qualifications').value,
+          bio: document.getElementById('teacher-bio').value,
+          password: document.getElementById('teacher-password').value
+        };
+        
+        registerTeacher(formData);
+      });
+
+      // Upload form handler
+      document.getElementById('upload-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('title', document.getElementById('course-title').value);
+        formData.append('description', document.getElementById('course-description').value);
+        formData.append('subjectId', document.getElementById('course-subject').value);
+        
+        const fileInput = document.getElementById('course-file');
+        if (fileInput.files[0]) {
+          formData.append('file', fileInput.files[0]);
+        }
+        
+        uploadCourse(formData);
+        closeUploadModal();
+      });
+
+      // Upload zone click handler
+      document.getElementById('upload-zone')?.addEventListener('click', () => {
+        document.getElementById('course-file').click();
+      });
+
+      // Drag and drop
+      const uploadZone = document.getElementById('upload-zone');
+      uploadZone?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+      });
+      uploadZone?.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('dragover');
+      });
+      uploadZone?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        const fileInput = document.getElementById('course-file');
+        fileInput.files = e.dataTransfer.files;
+      });
+
+      // File selection display
+      document.getElementById('course-file')?.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+          document.getElementById('upload-zone').querySelector('p').textContent = 
+            `Selected: ${e.target.files[0].name}`;
+        }
+      });
+
+      // Assign form handler
+      document.getElementById('assign-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const studentEmail = document.getElementById('assign-student-email').value;
+        const subjectId = parseInt(document.getElementById('assign-subject-id').value);
+        const teacherId = parseInt(document.getElementById('assign-teacher').value);
+        
+        // Get student ID from email (simplified - in production, you'd have an API endpoint)
+        const usersRes = await fetch(`${API_URL}/admin/users?role=student`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const users = await usersRes.json();
+        const student = users.find(u => u.email === studentEmail);
+        
+        if (student) {
+          assignTeacher(student.id, subjectId, teacherId);
+          closeAssignModal();
+        }
+      });
+    });
+
+    async function loadSubjectsForRegistration() {
+      const subjects = await loadSubjects();
+      const container = document.getElementById('subject-select');
+      if (container) {
+        container.innerHTML = subjects.map(s => `
+          <div class="subject-checkbox">
+            <input type="checkbox" id="subject-${s.id}" value="${s.id}" name="subjects">
+            <label for="subject-${s.id}">${s.icon} ${s.name}</label>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function loadSubjectsForSelect() {
+      const subjects = await loadSubjects();
+      
+      const searchSubject = document.getElementById('ai-search-subject');
+      if (searchSubject) {
+        subjects.forEach(s => {
+          const option = document.createElement('option');
+          option.value = s.id;
+          option.textContent = `${s.icon} ${s.name}`;
+          searchSubject.appendChild(option);
+        });
+      }
+
+      const courseSubject = document.getElementById('course-subject');
+      if (courseSubject) {
+        subjects.forEach(s => {
+          const option = document.createElement('option');
+          option.value = s.id;
+          option.textContent = `${s.icon} ${s.name}`;
+          courseSubject.appendChild(option);
+        });
+      }
+    }
+
+    function showUploadModal() {
+      document.getElementById('upload-modal').classList.add('active');
+    }
+
+    function closeUploadModal() {
+      document.getElementById('upload-modal').classList.remove('active');
+    }
+
+    function showAssignModal(subjectId, studentEmail) {
+      document.getElementById('assign-subject-id').value = subjectId;
+      document.getElementById('assign-student-email').value = studentEmail;
+      
+      loadTeachers().then(teachers => {
+        const select = document.getElementById('assign-teacher');
+        select.innerHTML = teachers.map(t => 
+          `<option value="${t.id}">${t.full_name}</option>`
+        ).join('');
+      });
+      
+      document.getElementById('assign-modal').classList.add('active');
+    }
+
+    function closeAssignModal() {
+      document.getElementById('assign-modal').classList.remove('active');
+    }
+
+    async function handleAISearch() {
+      const query = document.getElementById('ai-search-input').value;
+      const subjectId = document.getElementById('ai-search-subject').value;
+      
+      if (!query) {
+        showToast('Please enter a question', 'error');
+        return;
+      }
+
+      const resultsDiv = document.getElementById('ai-results');
+      resultsDiv.innerHTML = '<div class="loader" style="margin: 20px auto;"></div>';
+
+      const result = await searchAIQuestion(query, subjectId || null);
+      
+      if (result) {
+        resultsDiv.innerHTML = `
+          <div class="question-card">
+            <div class="question">Q: ${result.query}</div>
+            <div class="answer">${result.answer}</div>
+            ${result.subject ? `<span class="tag">${result.subject}</span>` : ''}
+          </div>
+        `;
+      } else {
+        resultsDiv.innerHTML = '<p>Failed to get answer. Please try again.</p>';
+      }
+    }
+
+    function switchDashboardTab(tab) {
+      document.querySelectorAll('#dashboard .tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if (tab === 'overview') {
+        loadDashboardData();
+      } else if (tab === 'courses') {
+        showPage('courses');
+      } else if (tab === 'questions') {
+        showPage('questions');
+      }
+    }
+
+    function switchAdminTab(tab) {
+      document.querySelectorAll('#admin .tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // Close modals on outside click
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
