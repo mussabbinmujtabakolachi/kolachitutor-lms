@@ -2,16 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initDatabase = exports.pool = void 0;
 const pg_1 = require("pg");
-exports.pool = new pg_1.Pool({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    database: process.env.DB_NAME || 'kolachi_lms',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres',
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-});
+let poolConfig;
+if (process.env.DATABASE_URL) {
+    poolConfig = {
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+    };
+}
+else {
+    poolConfig = {
+        host: process.env.DB_HOST || 'localhost',
+        port: parseInt(process.env.DB_PORT || '5432'),
+        database: process.env.DB_NAME || 'kolachi_lms',
+        user: process.env.DB_USER || 'postgres',
+        password: process.env.DB_PASSWORD || 'postgres',
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+    };
+}
+exports.pool = new pg_1.Pool(poolConfig);
 const initDatabase = async () => {
     const client = await exports.pool.connect();
     try {
