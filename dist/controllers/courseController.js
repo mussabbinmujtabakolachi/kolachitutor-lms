@@ -92,7 +92,8 @@ const downloadCourse = async (req, res) => {
             res.status(404).json({ error: 'No file available for download' });
             return;
         }
-        const filePath = path_1.default.join(__dirname, '../../', course.file_path);
+        const fileName = course.file_path.split('/').pop();
+        const filePath = path_1.default.join(__dirname, '../../public/uploads', fileName);
         res.download(filePath, course.file_name);
     }
     catch (error) {

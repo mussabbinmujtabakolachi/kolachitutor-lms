@@ -109,7 +109,8 @@ export const downloadCourse = async (req: Request, res: Response): Promise<void>
       return;
     }
     
-    const filePath = path.join(__dirname, '../../', course.file_path);
+    const fileName = course.file_path.split('/').pop();
+    const filePath = path.join(__dirname, '../../public/uploads', fileName);
     res.download(filePath, course.file_name);
   } catch (error) {
     console.error('Download course error:', error);
