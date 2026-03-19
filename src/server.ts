@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import dotenv from 'dotenv';
 import { pool, initDatabase } from './config/database';
 
@@ -14,6 +15,11 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const uploadsDir = path.join(__dirname, '../public/uploads');
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 app.use(cors());
 app.use(express.json());

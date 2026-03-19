@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_1 = require("./config/database");
 const auth_1 = __importDefault(require("./routes/auth"));
@@ -16,6 +17,10 @@ const admin_1 = __importDefault(require("./routes/admin"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
+const uploadsDir = path_1.default.join(__dirname, '../public/uploads');
+if (!fs_1.default.existsSync(uploadsDir)) {
+    fs_1.default.mkdirSync(uploadsDir, { recursive: true });
+}
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
