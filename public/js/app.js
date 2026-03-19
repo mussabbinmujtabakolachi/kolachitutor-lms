@@ -333,6 +333,10 @@ function displayCourses(courses) {
     return;
   }
 
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  const deleteBtn = isAdmin ? 
+    `<button class="btn btn-secondary" onclick="deleteCourse(${c.id})" style="margin-top: 5px; width: 100%; background: #ff3333;">Delete</button>` : '';
+
   courseGrid.innerHTML = courses.map(c => `
     <div class="course-card">
       <div class="course-thumbnail">${c.subject_icon || '📚'}</div>
@@ -340,13 +344,34 @@ function displayCourses(courses) {
         <h3>${c.title}</h3>
         <p>${c.description || 'No description'}</p>
         <div class="course-meta">
-          <span>${c.subject_name}</span>
+          <span>${c.subject_name || 'General'}</span>
           <span>${c.teacher_name || 'Admin'}</span>
         </div>
-        ${c.file_path ? `<button class="btn btn-primary" onclick="downloadCourse(${c.id}, '${c.file_name}')" style="margin-top: 15px; width: 100%;">Download</button>` : ''}
+        ${c.file_path ? `<button class="btn btn-primary" onclick="downloadCourse(${c.id}, '${c.file_name}')" style="margin-top: 15px; width: 100%;">Download File</button>` : '<p style="color: var(--text-secondary); margin-top: 10px;">No file attached</p>'}
+        ${deleteBtn}
       </div>
     </div>
   `).join('');
+}
+
+async function deleteCourse(courseId) {
+  if (!confirm('Are you sure you want to delete this course?')) return;
+  
+  try {
+    const response = await fetch(`${API_URL}/courses/${courseId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+
+    if (response.ok) {
+      showToast('Course deleted successfully!', 'success');
+      loadCoursesForStudent();
+    } else {
+      showToast('Failed to delete course', 'error');
+    }
+  } catch (error) {
+    showToast('Failed to delete course', 'error');
+  }
 }
 
 async function downloadCourse(courseId, fileName) {
@@ -504,6 +529,7 @@ window.registerTeacher = registerTeacher;
 window.logout = logout;
 window.showPage = showPage;
 window.downloadCourse = downloadCourse;
+window.deleteCourse = deleteCourse;
 window.askQuestion = askQuestion;
 window.searchAIQuestion = searchAIQuestion;
 window.assignTeacher = assignTeacher;
