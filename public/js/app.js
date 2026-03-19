@@ -115,6 +115,10 @@ function showPage(pageId) {
   window.location.hash = hash;
 
   window.scrollTo(0, 0);
+
+  if (pageId === 'courses') {
+    loadCoursesForStudent();
+  }
 }
 
 async function login(email, password) {
