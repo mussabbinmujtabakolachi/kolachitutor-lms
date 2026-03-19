@@ -6,7 +6,34 @@ document.addEventListener('DOMContentLoaded', () => {
   initParticles();
   checkAuth();
   setupEventListeners();
+  loadAllCoursesOnLoad();
 });
+
+async function loadAllCoursesOnLoad() {
+  try {
+    const response = await fetch(`${API_URL}/courses`);
+    const courses = await response.json();
+    const courseGrid = document.getElementById('courses-grid');
+    if (courseGrid && courses.length > 0) {
+      courseGrid.innerHTML = courses.map(c => `
+        <div class="course-card">
+          <div class="course-thumbnail">${c.subject_icon || '📚'}</div>
+          <div class="course-content">
+            <h3>${c.title}</h3>
+            <p>${c.description || 'No description'}</p>
+            <div class="course-meta">
+              <span>${c.subject_name || 'General'}</span>
+              <span>${c.teacher_name || 'Admin'}</span>
+            </div>
+            <button class="btn btn-primary" onclick="downloadCourse(${c.id}, '${c.file_name}')" style="margin-top: 15px; width: 100%;">Download File</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 function initParticles() {
   const container = document.getElementById('particles');
