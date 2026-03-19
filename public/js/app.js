@@ -226,8 +226,12 @@ async function loadCourses(subjectId = null) {
     const url = subjectId 
       ? `${API_URL}/courses?subjectId=${subjectId}` 
       : `${API_URL}/courses`;
+    console.log('Fetching:', url);
     const response = await fetch(url);
-    return await response.json();
+    console.log('Response status:', response.status);
+    const data = await response.json();
+    console.log('Courses data:', data);
+    return data;
   } catch (error) {
     console.error('Load courses error:', error);
     return [];
@@ -319,8 +323,14 @@ async function loadStudentDashboard() {
 }
 
 async function loadCoursesForStudent() {
-  const courses = await loadCourses();
-  displayCourses(courses);
+  console.log('Loading courses...');
+  try {
+    const courses = await loadCourses();
+    console.log('Courses loaded:', courses);
+    displayCourses(courses);
+  } catch (error) {
+    console.error('Error loading courses:', error);
+  }
 }
 
 async function loadTeacherDashboard() {
@@ -329,17 +339,19 @@ async function loadTeacherDashboard() {
 }
 
 function displayCourses(courses) {
+  console.log('Displaying courses:', courses);
   const courseGrid = document.getElementById('courses-grid');
-  if (!courseGrid) return;
+  if (!courseGrid) {
+    console.log('Course grid not found!');
+    return;
+  }
 
-  if (courses.length === 0) {
-    courseGrid.innerHTML = '<p>No courses available yet.</p>';
+  if (!courses || courses.length === 0) {
+    courseGrid.innerHTML = '<p style="text-align: center; padding: 20px;">No courses available yet.</p>';
     return;
   }
 
   const isAdmin = currentUser && currentUser.role === 'admin';
-  const deleteBtn = isAdmin ? 
-    `<button class="btn btn-secondary" onclick="deleteCourse(${c.id})" style="margin-top: 5px; width: 100%; background: #ff3333;">Delete</button>` : '';
 
   courseGrid.innerHTML = courses.map(c => `
     <div class="course-card">
@@ -352,7 +364,7 @@ function displayCourses(courses) {
           <span>${c.teacher_name || 'Admin'}</span>
         </div>
         ${c.file_path ? `<button class="btn btn-primary" onclick="downloadCourse(${c.id}, '${c.file_name}')" style="margin-top: 15px; width: 100%;">Download File</button>` : '<p style="color: var(--text-secondary); margin-top: 10px;">No file attached</p>'}
-        ${deleteBtn}
+        ${isAdmin ? `<button class="btn btn-secondary" onclick="deleteCourse(${c.id})" style="margin-top: 5px; width: 100%; background: #ff3333;">Delete</button>` : ''}
       </div>
     </div>
   `).join('');
