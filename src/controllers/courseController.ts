@@ -9,7 +9,7 @@ export const getCourses = async (req: Request, res: Response): Promise<void> => 
     let query = `
       SELECT c.*, s.name as subject_name, s.icon as subject_icon, u.full_name as teacher_name
       FROM courses c
-      JOIN subjects s ON c.subject_id = s.id
+      LEFT JOIN subjects s ON c.subject_id = s.id
       LEFT JOIN users u ON c.teacher_id = u.id
       WHERE 1=1
     `;

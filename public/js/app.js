@@ -383,7 +383,8 @@ async function uploadCourse(formData) {
 
     if (response.ok) {
       showToast('Course uploaded successfully!', 'success');
-      loadCourses();
+      closeUploadModal();
+      loadCoursesForStudent();
     } else {
       showToast('Upload failed', 'error');
     }
