@@ -152,6 +152,10 @@ function showPage(pageId) {
   if (pageId === 'courses') {
     loadCoursesForStudent();
   }
+
+  if (pageId === 'questions') {
+    loadQuestionHistory();
+  }
 }
 
 async function login(email, password) {
@@ -552,6 +556,87 @@ async function searchAIQuestion(query, subjectId = null) {
   }
 }
 
+async function loadQuestionHistory() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    
+    const response = await fetch(`${API_URL}/questions`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const questions = await response.json();
+    displayQuestionHistory(questions);
+  } catch (error) {
+    console.error('Error loading question history:', error);
+  }
+}
+
+function displayQuestionHistory(questions) {
+  const historyDiv = document.getElementById('question-history');
+  if (!historyDiv) return;
+  
+  if (!questions || questions.length === 0) {
+    historyDiv.innerHTML = '<p style="color: var(--text-secondary);">No questions asked yet.</p>';
+    return;
+  }
+  
+  historyDiv.innerHTML = questions.map(q => `
+    <div class="question-card" style="margin-bottom: 15px;">
+      <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div>
+          <span class="tag">${q.subject_name || 'General'}</span>
+          <p class="question" style="margin-top: 10px;">Q: ${q.question}</p>
+          <p style="color: var(--text-secondary); margin-top: 8px; font-size: 0.9rem;">${new Date(q.created_at).toLocaleDateString()}</p>
+        </div>
+      </div>
+      <div class="answer" style="margin-top: 10px;">${q.ai_answer || 'No answer yet'}</div>
+    </div>
+  `).join('');
+}
+
+async function handleAISearch() {
+  const query = document.getElementById('ai-search-input').value;
+  const subjectId = document.getElementById('ai-search-subject').value;
+  
+  if (!query) {
+    showToast('Please enter a question', 'error');
+    return;
+  }
+
+  const resultsDiv = document.getElementById('ai-results');
+  resultsDiv.innerHTML = '<div class="loader" style="margin: 20px auto;"></div>';
+
+  try {
+    const token = localStorage.getItem('token');
+    let result;
+    
+    if (token) {
+      result = await askQuestion(query, subjectId || null);
+    } else {
+      result = await searchAIQuestion(query, subjectId || null);
+    }
+    
+    if (result) {
+      resultsDiv.innerHTML = `
+        <div class="question-card">
+          <div class="question">Q: ${query}</div>
+          <div class="answer">${result.answer || result.ai_answer}</div>
+        </div>
+      `;
+      
+      if (token) {
+        loadQuestionHistory();
+      }
+      
+      document.getElementById('ai-search-input').value = '';
+    } else {
+      resultsDiv.innerHTML = '<p style="color: var(--error);">Failed to get answer. Please try again.</p>';
+    }
+  } catch (error) {
+    resultsDiv.innerHTML = '<p style="color: var(--error);">Error getting answer.</p>';
+  }
+}
+
 async function assignTeacher(studentId, subjectId, teacherId) {
   try {
     const response = await fetch(`${API_URL}/admin/assign-teacher`, {
@@ -628,6 +713,8 @@ window.downloadCourse = downloadCourse;
 window.deleteCourse = deleteCourse;
 window.askQuestion = askQuestion;
 window.searchAIQuestion = searchAIQuestion;
+window.handleAISearch = handleAISearch;
+window.loadQuestionHistory = loadQuestionHistory;
 window.assignTeacher = assignTeacher;
 window.loadTeachers = loadTeachers;
 window.loadSubjects = loadSubjects;
