@@ -154,8 +154,21 @@ function showPage(pageId) {
   }
 
   if (pageId === 'questions') {
-    loadQuestionHistory();
+    loadSubjectsForChat();
   }
+}
+
+async function loadSubjectsForChat() {
+  const select = document.getElementById('ai-chat-subject');
+  if (!select || select.options.length > 1) return;
+  
+  const subjects = await loadSubjects();
+  subjects.forEach(s => {
+    const option = document.createElement('option');
+    option.value = s.id;
+    option.textContent = `${s.icon} ${s.name}`;
+    select.appendChild(option);
+  });
 }
 
 async function login(email, password) {
@@ -594,6 +607,86 @@ function displayQuestionHistory(questions) {
   `).join('');
 }
 
+function addMessageToChat(message, isUser = false) {
+  const chatMessages = document.getElementById('chat-messages');
+  if (!chatMessages) return;
+  
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+  messageDiv.innerHTML = `
+    <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+    <div class="message-content">
+      <p>${message}</p>
+    </div>
+  `;
+  
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addLoadingToChat() {
+  const chatMessages = document.getElementById('chat-messages');
+  if (!chatMessages) return;
+  
+  const loadingDiv = document.createElement('div');
+  loadingDiv.className = 'chat-message bot';
+  loadingDiv.id = 'chat-loading';
+  loadingDiv.innerHTML = `
+    <div class="message-avatar">🤖</div>
+    <div class="chat-loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  `;
+  
+  chatMessages.appendChild(loadingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeLoadingFromChat() {
+  const loading = document.getElementById('chat-loading');
+  if (loading) loading.remove();
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById('ai-chat-input');
+  const subjectSelect = document.getElementById('ai-chat-subject');
+  
+  if (!input) return;
+  
+  const message = input.value.trim();
+  if (!message) return;
+  
+  const subjectId = subjectSelect?.value || null;
+  
+  addMessageToChat(message, true);
+  input.value = '';
+  addLoadingToChat();
+  
+  try {
+    const token = localStorage.getItem('token');
+    let result;
+    
+    if (token) {
+      result = await askQuestion(message, subjectId);
+    } else {
+      result = await searchAIQuestion(message, subjectId);
+    }
+    
+    removeLoadingFromChat();
+    
+    if (result) {
+      addMessageToChat(result.answer || result.ai_answer, false);
+    } else {
+      addMessageToChat('Sorry, I could not generate an answer. Please try again.', false);
+    }
+  } catch (error) {
+    removeLoadingFromChat();
+    addMessageToChat('Error getting answer. Please try again.', false);
+  }
+}
+
 async function handleAISearch() {
   const query = document.getElementById('ai-search-input').value;
   const subjectId = document.getElementById('ai-search-subject').value;
@@ -715,6 +808,7 @@ window.askQuestion = askQuestion;
 window.searchAIQuestion = searchAIQuestion;
 window.handleAISearch = handleAISearch;
 window.loadQuestionHistory = loadQuestionHistory;
+window.sendChatMessage = sendChatMessage;
 window.assignTeacher = assignTeacher;
 window.loadTeachers = loadTeachers;
 window.loadSubjects = loadSubjects;

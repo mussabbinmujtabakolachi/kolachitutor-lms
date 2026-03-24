@@ -257,28 +257,26 @@
 
   <!-- Questions Page -->
   <div id="questions" class="page">
-    <div class="dashboard">
-      <div class="dashboard-header">
-        <h2>AI Question <span>Search</span></h2>
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>🤖 AI Tutor</h2>
       </div>
-
-      <div class="questions-container">
-        <div class="search-box">
-          <input type="text" id="ai-search-input" placeholder="Ask any question...">
-          <select id="ai-search-subject">
-            <option value="">All Subjects</option>
-          </select>
-          <button class="btn btn-primary" onclick="handleAISearch()">Ask AI</button>
+      
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-message bot">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">
+            <p>Hello! I'm your AI tutor. Ask me anything about any subject - Math, Physics, Chemistry, Biology, Computer Science, English, and more!</p>
+          </div>
         </div>
-
-        <div id="ai-results">
-          <!-- Results will appear here -->
-        </div>
-
-        <h3 style="margin: 40px 0 20px;">Your Question History</h3>
-        <div id="question-history">
-          <!-- History will be loaded -->
-        </div>
+      </div>
+      
+      <div class="chat-input-container">
+        <select id="ai-chat-subject" class="chat-subject-select">
+          <option value="">All Subjects</option>
+        </select>
+        <input type="text" id="ai-chat-input" placeholder="Type your question here..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+        <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
       </div>
     </div>
   </div>
