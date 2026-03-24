@@ -460,6 +460,7 @@ async function deleteCourse(courseId) {
     if (response.ok) {
       showToast('Course deleted successfully!', 'success');
       loadCoursesForStudent();
+      loadStats();
     } else {
       showToast('Failed to delete course', 'error');
     }
@@ -504,6 +505,7 @@ async function uploadCourse(formData) {
       showToast('Course uploaded successfully!', 'success');
       closeUploadModal();
       loadCoursesForStudent();
+      loadStats();
     } else {
       showToast('Upload failed', 'error');
     }
