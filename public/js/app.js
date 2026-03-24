@@ -287,20 +287,23 @@ async function loadDashboardData() {
 
 async function loadStats() {
   try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    
     const [statsRes, coursesRes] = await Promise.all([
-      fetch(`${API_URL}/admin/stats`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      }),
+      fetch(`${API_URL}/admin/stats`, { headers }),
       fetch(`${API_URL}/courses`)
     ]);
     
-    const stats = await statsRes.json();
-    const courses = await coursesRes.json();
+    const statsData = await statsRes.json();
+    const coursesData = await coursesRes.json();
     
-    document.getElementById('stat-students').textContent = stats.students || 0;
-    document.getElementById('stat-teachers').textContent = stats.teachers || 0;
-    document.getElementById('stat-courses').textContent = courses.length || 0;
-    document.getElementById('stat-questions').textContent = stats.questions || 0;
+    const coursesCount = Array.isArray(coursesData) ? coursesData.length : 0;
+    
+    document.getElementById('stat-students').textContent = statsData.students || 0;
+    document.getElementById('stat-teachers').textContent = statsData.teachers || 0;
+    document.getElementById('stat-courses').textContent = coursesCount;
+    document.getElementById('stat-questions').textContent = statsData.questions || 0;
   } catch (error) {
     console.error('Stats error:', error);
   }
