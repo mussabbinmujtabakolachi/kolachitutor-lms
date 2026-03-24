@@ -169,7 +169,12 @@ async function login(email, password) {
       updateUIForLoggedInUser();
       showToast('Login successful!', 'success');
       showPage('dashboard');
-      loadDashboardData();
+      setTimeout(() => {
+        loadStats();
+        if (currentUser.role === 'admin') {
+          loadAdminDashboard();
+        }
+      }, 100);
     } else {
       const data = await response.json();
       showToast(data.error || 'Login failed', 'error');
@@ -287,7 +292,9 @@ async function loadDashboardData() {
 
 async function loadStats() {
   try {
+    console.log('Loading stats...');
     const token = localStorage.getItem('token');
+    console.log('Token exists:', !!token);
     const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
     
     const [statsRes, coursesRes] = await Promise.all([
@@ -295,22 +302,36 @@ async function loadStats() {
       fetch(`${API_URL}/courses`)
     ]);
     
+    console.log('Stats status:', statsRes.status);
+    console.log('Courses status:', coursesRes.status);
+    
     const statsData = await statsRes.json().catch(() => ({}));
     const coursesData = await coursesRes.json().catch(() => []);
-    
+
     console.log('Stats API response:', statsData);
     console.log('Courses API response:', coursesData);
     
     const coursesCount = Array.isArray(coursesData) ? coursesData.length : 0;
+    console.log('Courses count:', coursesCount);
     
     const studentsEl = document.getElementById('stat-students');
     const teachersEl = document.getElementById('stat-teachers');
     const coursesEl = document.getElementById('stat-courses');
     const questionsEl = document.getElementById('stat-questions');
     
+    console.log('Elements found:', {
+      students: !!studentsEl,
+      teachers: !!teachersEl,
+      courses: !!coursesEl,
+      questions: !!questionsEl
+    });
+    
     if (studentsEl) studentsEl.textContent = statsData.students || 0;
     if (teachersEl) teachersEl.textContent = statsData.teachers || 0;
-    if (coursesEl) coursesEl.textContent = coursesCount;
+    if (coursesEl) {
+      coursesEl.textContent = coursesCount;
+      console.log('Set courses to:', coursesCount);
+    }
     if (questionsEl) questionsEl.textContent = statsData.questions || 0;
   } catch (error) {
     console.error('Stats error:', error);
