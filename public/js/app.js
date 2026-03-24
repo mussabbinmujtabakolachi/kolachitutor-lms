@@ -109,6 +109,12 @@ function updateUIForLoggedInUser() {
         </div>
       </div>
     `;
+    
+    // Show/hide admin nav card
+    const adminNav = document.getElementById('admin-nav');
+    if (adminNav) {
+      adminNav.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+    }
   }
 }
 

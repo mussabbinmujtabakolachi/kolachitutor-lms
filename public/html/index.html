@@ -194,10 +194,23 @@
     <div class="dashboard">
       <div class="dashboard-header">
         <h2>Welcome, <span id="user-name">User</span>!</h2>
-        <div class="tabs">
-          <button class="tab active" onclick="switchDashboardTab('overview')">Overview</button>
-          <button class="tab" onclick="switchDashboardTab('courses')">My Courses</button>
-          <button class="tab" onclick="switchDashboardTab('questions')">My Questions</button>
+      </div>
+
+      <div class="dashboard-nav">
+        <div class="dashboard-nav-card" onclick="showPage('courses')">
+          <div class="nav-icon">📚</div>
+          <h3>Courses</h3>
+          <p>Browse & Download Courses</p>
+        </div>
+        <div class="dashboard-nav-card" onclick="showPage('questions')">
+          <div class="nav-icon">🤖</div>
+          <h3>AI Questions</h3>
+          <p>Ask Questions & Get Answers</p>
+        </div>
+        <div class="dashboard-nav-card" onclick="showPage('admin')" id="admin-nav" style="display:none;">
+          <div class="nav-icon">⚙️</div>
+          <h3>Admin Panel</h3>
+          <p>Manage Users & Assignments</p>
         </div>
       </div>
 

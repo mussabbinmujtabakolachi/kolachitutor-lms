@@ -279,6 +279,46 @@ h1, h2, h3, h4, h5, h6 {
   flex-wrap: wrap;
 }
 
+.dashboard-nav {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 40px 0;
+  flex-wrap: wrap;
+}
+
+.dashboard-nav-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 40px 50px;
+  text-align: center;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 250px;
+}
+
+.dashboard-nav-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--accent-orange);
+  box-shadow: 0 15px 40px rgba(255, 107, 0, 0.2);
+}
+
+.dashboard-nav-card .nav-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+}
+
+.dashboard-nav-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.dashboard-nav-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
 /* 3D Card */
 .card-3d {
   background: var(--bg-card);
