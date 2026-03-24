@@ -274,6 +274,8 @@ async function loadCourses(subjectId = null) {
 async function loadDashboardData() {
   if (!currentUser) return;
 
+  loadStats();
+
   if (currentUser.role === 'admin') {
     loadAdminDashboard();
   } else if (currentUser.role === 'teacher') {
@@ -283,18 +285,29 @@ async function loadDashboardData() {
   }
 }
 
+async function loadStats() {
+  try {
+    const [statsRes, coursesRes] = await Promise.all([
+      fetch(`${API_URL}/admin/stats`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      }),
+      fetch(`${API_URL}/courses`)
+    ]);
+    
+    const stats = await statsRes.json();
+    const courses = await coursesRes.json();
+    
+    document.getElementById('stat-students').textContent = stats.students || 0;
+    document.getElementById('stat-teachers').textContent = stats.teachers || 0;
+    document.getElementById('stat-courses').textContent = courses.length || 0;
+    document.getElementById('stat-questions').textContent = stats.questions || 0;
+  } catch (error) {
+    console.error('Stats error:', error);
+  }
+}
+
 async function loadAdminDashboard() {
   try {
-    const statsRes = await fetch(`${API_URL}/admin/stats`, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    const stats = await statsRes.json();
-
-    document.getElementById('stat-students').textContent = stats.students;
-    document.getElementById('stat-teachers').textContent = stats.teachers;
-    document.getElementById('stat-courses').textContent = stats.courses;
-    document.getElementById('stat-questions').textContent = stats.questions;
-
     loadTeacherAssignments();
   } catch (error) {
     console.error('Admin dashboard error:', error);
