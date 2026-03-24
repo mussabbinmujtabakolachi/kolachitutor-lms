@@ -1,137 +1,115 @@
 import axios from 'axios';
 
 export const getAIAnswer = async (question: string, subject?: string): Promise<string> => {
-  try {
-    const subjectContext = subject ? `The question is about ${subject}. ` : '';
-    const fullQuestion = `${subjectContext}Question: ${question}`;
+  const subjectContext = subject ? `The question is about ${subject}. ` : '';
+  const fullQuestion = `${subjectContext}Question: ${question}`;
 
-    // Try Groq (FREE - fastest)
-    const groqKey = process.env.GROQ_API_KEY;
-    if (groqKey) {
-      try {
-        const groqResponse = await axios.post(
-          'https://api.groq.com/openai/v1/chat/completions',
-          {
-            model: 'llama-3.1-8b-instant',
-            messages: [
-              { role: 'system', content: 'You are an expert tutor for Kolachi Tutors. Provide clear, helpful, educational answers. Be concise but thorough.' },
-              { role: 'user', content: fullQuestion }
-            ],
-            max_tokens: 600,
-            temperature: 0.7
-          },
-          {
-            headers: { Authorization: `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
-            timeout: 30000
-          }
-        );
-        if ((groqResponse.data as any)?.choices?.[0]?.message?.content) {
-          return (groqResponse.data as any).choices[0].message.content;
-        }
-      } catch (e) {
-        console.log('Groq not available');
-      }
-    }
-
-    // Try Gemini (FREE - Google AI)
-    const geminiKey = process.env.GEMINI_API_KEY;
-    if (geminiKey) {
-      try {
-        const geminiResponse = await axios.post(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
-          {
-            contents: [{ parts: [{ text: `You are an expert tutor for Kolachi Tutors. ${fullQuestion}` }] }],
-            generationConfig: { maxOutputTokens: 600, temperature: 0.7 }
-          },
-          { timeout: 30000 }
-        );
-        if ((geminiResponse.data as any)?.candidates?.[0]?.content?.parts?.[0]?.text) {
-          return (geminiResponse.data as any).candidates[0].content.parts[0].text;
-        }
-      } catch (e) {
-        console.log('Gemini not available');
-      }
-    }
-
-    // Try Ollama (FREE - local)
-    const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+  // Groq (FREE - Recommended)
+  const groqKey = process.env.GROQ_API_KEY;
+  if (groqKey) {
     try {
-      const ollamaResponse = await axios.post(`${ollamaUrl}/api/generate`, {
-        model: 'llama2',
-        prompt: `You are an expert tutor for Kolachi Tutors. ${fullQuestion}`,
-        stream: false,
-        options: { temperature: 0.7, num_predict: 500 }
-      }, { timeout: 30000 });
-      if ((ollamaResponse.data as any).response) {
-        return (ollamaResponse.data as any).response;
-      }
-    } catch (e) {
-      console.log('Ollama not available');
-    }
-
-    // Try Hugging Face (FREE tier)
-    const hfToken = process.env.HF_TOKEN;
-    if (hfToken) {
-      try {
-        const hfResponse = await axios.post(
-          'https://api-inference.huggingface.co/models/facebook/bart-large-cnn',
-          { inputs: `Answer: ${fullQuestion}` },
-          { headers: { Authorization: `Bearer ${hfToken}` }, timeout: 30000 }
-        );
-        if (Array.isArray(hfResponse.data) && hfResponse.data[0]?.summary_text) {
-          return hfResponse.data[0].summary_text;
+      const response = await axios.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          model: 'llama-3.1-8b-instant',
+          messages: [
+            { role: 'system', content: 'You are an expert tutor for Kolachi Tutors. Provide clear, helpful, educational answers. Be concise but thorough.' },
+            { role: 'user', content: fullQuestion }
+          ],
+          max_tokens: 800,
+          temperature: 0.7
+        },
+        {
+          headers: { Authorization: `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+          timeout: 30000
         }
-      } catch (e) {
-        console.log('HuggingFace not available');
+      );
+      if ((response.data as any)?.choices?.[0]?.message?.content) {
+        return (response.data as any).choices[0].message.content;
+      }
+      } catch (e: any) {
+        console.log('Groq error:', e?.message);
       }
     }
 
-    // Fallback: Smart rule-based responses
-    return generateFallbackAnswer(question, subject);
-  } catch (error) {
-    console.error('AI Error:', error);
-    return generateFallbackAnswer(question, subject);
+  // Gemini (FREE)
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (geminiKey) {
+    try {
+      const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
+        {
+          contents: [{ parts: [{ text: `You are an expert tutor. ${fullQuestion}` }] }],
+          generationConfig: { maxOutputTokens: 800, temperature: 0.7 }
+        },
+        { timeout: 30000 }
+      );
+      if ((response.data as any)?.candidates?.[0]?.content?.parts?.[0]?.text) {
+        return (response.data as any).candidates[0].content.parts[0].text;
+      }
+    } catch (e: any) {
+      console.log('Gemini error:', e?.message);
+    }
   }
+
+  // Ollama (FREE - Local)
+  const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+  try {
+    const response = await axios.post(`${ollamaUrl}/api/generate`, {
+      model: 'llama2',
+      prompt: `Expert tutor: ${fullQuestion}`,
+      stream: false,
+      options: { temperature: 0.7, num_predict: 500 }
+    }, { timeout: 30000 });
+    if ((response.data as any)?.response) {
+      return (response.data as any).response;
+    }
+  } catch (e: any) {
+    console.log('Ollama error:', e?.message);
+  }
+
+  // Fallback - Smart responses
+  return generateFallbackAnswer(question, subject);
 };
 
 function generateFallbackAnswer(question: string, subject?: string): string {
   const q = question.toLowerCase();
   
-  if (q.includes('math') || q.includes('calculate') || q.includes('equation') || q.includes('solve') || q.includes('algebra')) {
-    return `Great question about Mathematics! 📐\n\nTo solve math problems:\n\n1. **Read carefully** - Understand what the problem asks\n2. **Identify knowns** - Note all given information\n3. **Choose formula** - Select the right equation\n4. **Substitute** - Put numbers in place of variables\n5. **Solve** - Calculate step by step\n6. **Check** - Verify your answer\n\nShare your specific problem!`;
+  if (q.includes('math') || q.includes('equation') || q.includes('solve') || q.includes('calculate')) {
+    return `Mathematics Help 📐\n\n1. Read problem carefully\n2. Identify what to find\n3. Use appropriate formula\n4. Show all steps\n5. Check your answer\n\nShare your specific problem for detailed help!`;
   }
   
-  if (q.includes('physics') || q.includes('force') || q.includes('energy') || q.includes('motion') || q.includes('velocity')) {
-    return `Excellent Physics question! ⚛️\n\nApproach physics problems:\n\n1. **List variables** - What do you know? Need?\n2. **Choose formula** - F=ma, E=mc², etc.\n3. **Check units** - Make everything consistent\n4. **Calculate** - Solve algebraically first\n5. **Include units** - Always state answer with units\n\nWhat specific topic - mechanics, thermodynamics, waves?`;
+  if (q.includes('physics') || q.includes('force') || q.includes('energy') || q.includes('motion')) {
+    return `Physics Help ⚛️\n\n1. List known/unknown quantities\n2. Choose correct formula\n3. Check units consistency\n4. Solve algebraically first\n5. Include units in answer\n\nWhat specific topic do you need?`;
   }
   
-  if (q.includes('chemistry') || q.includes('atom') || q.includes('molecule') || q.includes('reaction') || q.includes('element')) {
-    return `Good Chemistry question! 🧪\n\nSteps for chemistry:\n\n1. **Identify reaction type** - Synthesis, decomposition, etc.\n2. **Balance equation** - Count atoms on both sides\n3. **Mole ratio** - Use stoichiometry\n4. **Check** - Verify conservation of mass\n\nShare the specific problem!`;
+  if (q.includes('chemistry') || q.includes('atom') || q.includes('reaction') || q.includes('element')) {
+    return `Chemistry Help 🧪\n\n1. Identify reaction type\n2. Balance equation\n3. Use mole ratios\n4. Check conservation of mass\n\nShare the specific problem!`;
   }
   
   if (q.includes('biology') || q.includes('cell') || q.includes('DNA') || q.includes('organism')) {
-    return `Biology question! 🧬\n\nKey concepts:\n\n1. **Cell theory** - All living things are cells\n2. **Genetics** - DNA → RNA → Protein\n3. **Ecosystems** - Energy flows, matter cycles\n4. **Evolution** - Change through natural selection\n\nWhat specific topic?`;
+    return `Biology Help 🧬\n\nKey concepts:\n• Cell theory\n• Genetics (DNA → RNA → Protein)\n• Ecosystems\n• Evolution\n\nWhat topic do you need?`;
   }
   
-  if (q.includes('code') || q.includes('programming') || q.includes('python') || q.includes('javascript') || q.includes('algorithm')) {
-    return `Programming question! 💻\n\nCoding approach:\n\n1. **Understand** - What should code do?\n2. **Plan** - Break into smaller steps\n3. **Pseudocode** - Write logic first\n4. **Code** - Write actual code\n5. **Test** - Try different inputs\n6. **Debug** - Fix any errors\n\nShare your code!`;
+  if (q.includes('code') || q.includes('programming') || q.includes('python') || q.includes('javascript') || q.includes('function')) {
+    return `Programming Help 💻\n\n1. Understand the problem\n2. Break into steps\n3. Write pseudocode first\n4. Code incrementally\n5. Test with different inputs\n\nShare your code for help!`;
   }
   
-  if (q.includes('english') || q.includes('grammar') || q.includes('writing') || q.includes('essay')) {
-    return `Language & Writing tips! 📚\n\nBetter writing:\n\n1. **Clear thesis** - One main idea per paragraph\n2. **Structure** - Intro, body, conclusion\n3. **Vary sentences** - Mix short and long\n4. **Proofread** - Check grammar/spelling\n5. **Read aloud** - Catches errors\n\nWhat specifically?`;
+  if (q.includes('english') || q.includes('grammar') || q.includes('essay') || q.includes('writing')) {
+    return `English Help 📚\n\nTips:\n• Clear thesis statement\n• Good paragraph structure\n• Vary sentence length\n• Proofread carefully\n\nWhat specifically?`;
   }
   
   if (q.includes('pakistan') || q.includes('history') || q.includes('independence') || q.includes('partition')) {
-    return `Pakistan Studies! 🇵🇰\n\nKey events:\n\n1. **1857** - War of Independence\n2. **1940** - Lahore Resolution\n3. **1947** - Independence & Partition\n4. **1956** - First Constitution\n5. **1971** - Bangladesh Creation\n\nWhat topic?`;
+    return `Pakistan Studies 🇵🇰\n\nKey Events:\n• 1857 - War of Independence\n• 1940 - Lahore Resolution\n• 1947 - Independence\n• 1971 - Bangladesh Creation\n\nWhat topic?`;
   }
   
   if (q.includes('islam') || q.includes('quran') || q.includes('hadith') || q.includes('prayer')) {
-    return `Islamic Studies! 🕌\n\nKey concepts:\n\n1. **Five Pillars** - Shahada, Prayer, Zakat, Sawm, Hajj\n2. **Quran** - Holy book, guidance\n3. **Hadith** - Sayings of Prophet (PBUH)\n4. **Prayer times** - Fajr, Dhuhr, Asr, Maghrib, Isha\n\nWhat topic?`;
+    return `Islamic Studies 🕌\n\nFive Pillars:\n1. Shahada\n2. Prayer (5 times)\n3. Zakat\n4. Sawm (Ramadan)\n5. Hajj\n\nWhat topic?`;
   }
   
-  if (q.includes('study') || q.includes('learn') || q.includes('memory') || q.includes('exam')) {
-    return `Study strategies! 📖\n\n1. **Active recall** - Test yourself\n2. **Spaced repetition** - Review at intervals\n3. **Practice** - Do past papers\n4. **Teach** - Explain to others\n5. **Break it down** - Small chunks\n\nConsistency beats cramming!`;
+  if (q.includes('study') || q.includes('learn') || q.includes('exam') || q.includes('memory')) {
+    return `Study Tips 📖\n\n1. Active recall - test yourself\n2. Spaced repetition\n3. Practice past papers\n4. Teach others\n5. Break into chunks\n\nStay consistent!`;
   }
   
-  return `Thanks for your question! 🙏\n\nTo help better:\n\n• Be specific about what you don't understand\n• Share examples you have\n• Tell me what you've tried\n• Mention your grade level\n\nThe more details, the better I can help!\n\nSubjects: Math, Physics, Chemistry, Biology, Computer Science, English, Urdu, Pakistan Studies, Islamic Studies, Economics.`;
+  return `Thanks for your question! 🙏\n\nTips for better answers:\n• Be specific about what you need\n• Share examples\n• Mention your grade level\n\nSubjects: Math, Physics, Chemistry, Biology, Computer Science, English, Urdu, Pakistan Studies, Islamic Studies, Economics.`;
 }
