@@ -1,15 +1,17 @@
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-card: #252525;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-card: #ffffff;
   --accent-orange: #ff6b00;
   --accent-orange-light: #ff8c00;
   --accent-white: #ffffff;
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
   --success: #00d26a;
   --error: #ff3333;
-  --border: #333333;
+  --border: #e0e0e0;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-hover: rgba(255, 107, 0, 0.15);
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
@@ -94,9 +96,9 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   height: 70px;
-  background: rgba(10, 10, 10, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  background: var(--accent-white);
+  box-shadow: 0 2px 10px var(--shadow);
+  border-bottom: 3px solid var(--accent-orange);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -164,9 +166,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn {
-  padding: 10px 25px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -186,17 +188,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.5);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
 }
 
 .btn-secondary {
-  background: transparent;
-  color: var(--text-primary);
+  background: var(--accent-white);
+  color: var(--accent-orange);
   border: 2px solid var(--accent-orange);
 }
 
 .btn-secondary:hover {
   background: var(--accent-orange);
+  color: var(--accent-white);
   transform: translateY(-2px);
 }
 
@@ -206,13 +209,14 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
   padding: 15px 40px;
   font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 10px;
+  font-weight: 700;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   transform-style: preserve-3d;
   box-shadow: 
-    0 6px 0 #cc5500,
+    0 4px 0 #cc5500,
+    0 8px 20px rgba(255, 107, 0, 0.3);
     0 10px 20px rgba(255, 107, 0, 0.3);
 }
 
