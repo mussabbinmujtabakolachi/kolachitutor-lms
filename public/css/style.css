@@ -94,8 +94,9 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   height: 70px;
-  background: linear-gradient(135deg, var(--accent-orange), var(--accent-orange-light));
+  background: rgba(10, 10, 10, 0.95);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,7 +108,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--accent-orange);
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -115,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo span {
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .nav-links {
@@ -125,7 +126,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-links a {
-  color: white;
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
@@ -145,17 +146,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-links a:hover {
-  color: #1a1a1a;
+  color: var(--accent-orange);
 }
 
 .nav-links a:hover::after {
   width: 100%;
-  background: #1a1a1a;
 }
 
 .nav-links a.active {
-  color: white;
-  font-weight: 700;
+  color: var(--accent-orange);
 }
 
 .user-menu {
