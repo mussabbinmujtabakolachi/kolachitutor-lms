@@ -1,15 +1,15 @@
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-card: #252525;
+  --bg-primary: #fff8f5;
+  --bg-secondary: #fff0e6;
+  --bg-card: #ffffff;
   --accent-orange: #ff6b00;
   --accent-orange-light: #ff8c00;
   --accent-white: #ffffff;
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
   --success: #00d26a;
   --error: #ff3333;
-  --border: #333333;
+  --border: #e0d4d0;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
