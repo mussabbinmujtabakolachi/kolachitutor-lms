@@ -89,23 +89,6 @@ if (!fs.existsSync(uploadsDir)){
 
 ---
 
-## Theme Change to White Background ✅
-
-### 10. White Theme CSS Variables
-**File:** `public/css/style.css`
-**Changes:**
-- `--bg-primary: #ffffff` (was dark)
-- `--bg-secondary: #f8f9fa` (light gray)
-- `--bg-card: #ffffff` (white cards)
-- `--text-primary: #1a1a1a` (dark text)
-- `--text-secondary: #666666` (gray text)
-- `--border: #e0e0e0` (light borders)
-- Header background: white with orange border
-- Button styles: orange gradient with white text
-- Cards: white background with light borders
-
----
-
 ## Deployment Checklist
 
 - [x] API URL uses dynamic origin
@@ -116,4 +99,3 @@ if (!fs.existsSync(uploadsDir)){
 - [x] Download works
 - [x] Delete works for admin
 - [x] Dashboard has navigation cards
-- [x] White theme applied
