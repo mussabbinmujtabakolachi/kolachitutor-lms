@@ -40,47 +40,43 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
 }
 
 .particle {
   position: absolute;
-  background: radial-gradient(circle at 30% 30%, #cc5500, #993d00);
+  width: 15px;
+  height: 15px;
+  background: radial-gradient(circle at 30% 30%, #ff6b00, #ff8c00);
   border-radius: 50%;
-  animation: float 12s infinite ease-in-out, pulse 3s infinite ease-in-out;
-  box-shadow: 0 0 25px rgba(204, 85, 0, 0.8), 0 0 50px rgba(153, 61, 0, 0.5);
-  opacity: 1;
+  animation: float 20s linear infinite;
+  box-shadow: 0 0 15px #ff6b00, 0 0 30px #ff8c00;
 }
 
 .particle:nth-child(odd) {
-  animation: float 15s infinite ease-in-out reverse, pulse 4s infinite ease-in-out;
+  width: 20px;
+  height: 20px;
+  animation: float 25s linear infinite;
+  animation-delay: -10s;
 }
 
 .particle:nth-child(3n) {
   width: 25px;
   height: 25px;
-  animation: float 18s infinite ease-in-out, pulse 5s infinite ease-in-out;
+  animation: float 30s linear infinite;
+  animation-delay: -15s;
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(100vh) scale(0.5);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  90% {
-    opacity: 0.8;
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 1;
   }
   100% {
-    transform: translateY(-100vh) scale(1.2);
-    opacity: 0;
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 1;
   }
 }
 
