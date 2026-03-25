@@ -1,6 +1,6 @@
 :root {
-  --bg-primary: #fff0e0;
-  --bg-secondary: #ffe6cc;
+  --bg-primary: #fff5f0;
+  --bg-secondary: #fff0e6;
   --bg-card: #ffffff;
   --accent-orange: #ff6b00;
   --accent-orange-dark: #cc5500;
@@ -10,7 +10,7 @@
   --text-secondary: #666666;
   --success: #00d26a;
   --error: #ff3333;
-  --border: #ffd9b3;
+  --border: #e0e0e0;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
@@ -24,8 +24,8 @@
 body {
   font-family: 'Rajdhani', sans-serif;
   background: 
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L60 20 L80 25 L65 40 L70 60 L50 50 L30 60 L35 40 L20 25 L40 20 Z' fill='%23ff6b00' fill-opacity='0.08'/%3E%3Cpath d='M0 50 Q25 40 50 50 Q75 60 100 50' stroke='%23ff6b00' stroke-opacity='0.1' fill='none' stroke-width='2'/%3E%3Cpath d='M0 70 Q25 60 50 70 Q75 80 100 70' stroke='%23ff6b00' stroke-opacity='0.08' fill='none' stroke-width='1.5'/%3E%3Ccircle cx='20' cy='30' r='15' stroke='%23ff6b00' stroke-opacity='0.08' fill='none' stroke-width='2'/%3E%3Ccircle cx='80' cy='70' r='20' stroke='%23ff6b00' stroke-opacity='0.07' fill='none' stroke-width='2'/%3E%3C/svg%3E"),
-    linear-gradient(135deg, #fff0e0 0%, #ffe6cc 50%, #ffd9b3 100%);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L60 20 L80 25 L65 40 L70 60 L50 50 L30 60 L35 40 L20 25 L40 20 Z' fill='%23ff6b00' fill-opacity='0.03'/%3E%3Cpath d='M0 50 Q25 40 50 50 Q75 60 100 50' stroke='%23ff6b00' stroke-opacity='0.05' fill='none' stroke-width='2'/%3E%3Cpath d='M0 70 Q25 60 50 70 Q75 80 100 70' stroke='%23ff6b00' stroke-opacity='0.04' fill='none' stroke-width='1.5'/%3E%3Ccircle cx='20' cy='30' r='15' stroke='%23ff6b00' stroke-opacity='0.04' fill='none' stroke-width='2'/%3E%3Ccircle cx='80' cy='70' r='20' stroke='%23ff6b00' stroke-opacity='0.03' fill='none' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, #fff5f0 0%, #ffe6d9 50%, #fff0e6 100%);
   background-size: 200px 200px, 100% 100%;
   color: var(--text-primary);
   min-height: 100vh;
@@ -247,9 +247,9 @@ h1, h2, h3, h4, h5, h6 {
   padding: 100px 5% 50px;
   position: relative;
   background: 
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L60 20 L80 25 L65 40 L70 60 L50 50 L30 60 L35 40 L20 25 L40 20 Z' fill='%23ff6b00' fill-opacity='0.12'/%3E%3C/svg%3E"),
-    linear-gradient(135deg, #fff0e0 0%, #ffe6cc 100%);
-  background-size: 200px 200px, 100% 100%;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 5 L50 25 L70 30 L55 45 L60 65 L40 55 L20 65 L25 45 L10 30 L30 25 Z' fill='%23ff6b00' fill-opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, rgba(255,107,0,0.1) 0%, rgba(255,140,0,0.05) 100%);
+  background-size: 160px 160px, 100% 100%;
 }
 
 .hero-content {
