@@ -302,10 +302,10 @@ a {
   border-radius: var(--radius-xl);
   padding: 32px 28px;
   text-align: center;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
   position: relative;
   overflow: hidden;
 }
@@ -358,9 +358,9 @@ a {
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   padding: 32px;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
 }
 
 .card-3d:hover {
@@ -399,9 +399,9 @@ a {
   border-radius: var(--radius-xl);
   padding: 36px 28px;
   text-align: center;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
   position: relative;
 }
 
@@ -447,8 +447,8 @@ a {
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   padding: 40px;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--accent-orange);
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
   animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -575,10 +575,10 @@ a {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 28px 24px;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   text-align: center;
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
 }
 
 .stat-card:hover {
@@ -612,9 +612,9 @@ a {
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
 }
 
 .course-card:hover {
@@ -702,9 +702,9 @@ a {
   border-radius: var(--radius-lg);
   padding: 28px;
   margin-bottom: 20px;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
 }
 
 .question-card:hover {
@@ -733,8 +733,8 @@ a {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--accent-orange);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
 }
 
 .admin-table th,
@@ -803,8 +803,8 @@ a {
   padding: 40px;
   max-width: 500px;
   width: 90%;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-xl);
+  border: 2px solid var(--accent-orange);
+  box-shadow: 0 0 30px rgba(255, 107, 53, 0.25);
   animation: modalOpen 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1068,8 +1068,9 @@ a {
   background: var(--bg-card);
   border-radius: var(--radius-md);
   margin-bottom: 12px;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.1);
 }
 
 .file-item:hover {
@@ -1134,14 +1135,14 @@ a {
   background: var(--bg-secondary);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-xl);
+  border: 2px solid var(--accent-orange);
+  box-shadow: 0 0 25px rgba(255, 107, 53, 0.2);
 }
 
 .chat-header {
   padding: 24px;
   background: var(--bg-card);
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 2px solid var(--accent-orange);
   text-align: center;
 }
 
@@ -1202,9 +1203,9 @@ a {
 
 .chat-message.bot .message-content {
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--accent-orange);
   border-bottom-left-radius: 6px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.1);
 }
 
 .message-content p { margin: 0; white-space: pre-wrap; }
