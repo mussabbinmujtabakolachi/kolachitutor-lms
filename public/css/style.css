@@ -250,10 +250,9 @@ h1, h2, h3, h4, h5, h6 {
 .hero h1 {
   font-size: 4rem;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--accent-white), var(--accent-orange));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #cc5500;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(204, 85, 0, 0.3);
   animation: glow 2s ease-in-out infinite alternate;
 }
 
@@ -271,6 +270,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-secondary);
   margin-bottom: 40px;
   line-height: 1.8;
+  font-weight: 600;
 }
 
 .hero-buttons {
