@@ -413,6 +413,11 @@ h1, h2, h3, h4, h5, h6 {
   padding: 40px;
   border: 1px solid var(--border);
   animation: slideIn 0.5s ease;
+  color: white;
+}
+
+.form-card label {
+  color: white;
 }
 
 @keyframes slideIn {
@@ -455,7 +460,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bg-secondary);
   border: 2px solid var(--border);
   border-radius: 10px;
-  color: var(--text-primary);
+  color: white;
   font-family: 'Rajdhani', sans-serif;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -669,12 +674,14 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 15px;
   overflow: hidden;
   border: 1px solid var(--border);
+  color: white;
 }
 
 .admin-table th,
 .admin-table td {
   padding: 15px 20px;
   text-align: left;
+  color: white;
 }
 
 .admin-table th {
