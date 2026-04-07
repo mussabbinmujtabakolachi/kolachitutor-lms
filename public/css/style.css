@@ -464,10 +464,14 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bg-secondary);
   border: 2px solid var(--border);
   border-radius: 10px;
-  color: white;
+  color: black;
   font-family: 'Rajdhani', sans-serif;
   font-size: 1rem;
   transition: all 0.3s ease;
+}
+
+.form-group input {
+  color: black;
 }
 
 .form-group input:focus,
@@ -750,6 +754,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .modal-content label {
   color: black;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  color: black;
+  background: #fff;
+  border: 2px solid #ddd;
+}
+
+.modal-content input::placeholder {
+  color: #999;
 }
 
 @keyframes modalOpen {
