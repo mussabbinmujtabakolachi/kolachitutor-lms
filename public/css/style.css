@@ -745,6 +745,11 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border);
   transform: perspective(1000px) rotateX(0deg);
   animation: modalOpen 0.3s ease;
+  color: black;
+}
+
+.modal-content label {
+  color: black;
 }
 
 @keyframes modalOpen {
