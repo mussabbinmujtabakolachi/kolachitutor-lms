@@ -104,6 +104,7 @@ function updateUIForLoggedInUser() {
           <a class="dropdown-item" href="#dashboard">Dashboard</a>
           <a class="dropdown-item" href="#courses">My Courses</a>
           <a class="dropdown-item" href="#questions">Questions</a>
+          <a class="dropdown-item" href="#classes">Online Classes</a>
           ${currentUser.role === 'admin' ? '<a class="dropdown-item" href="#admin">Admin Panel</a>' : ''}
           <a class="dropdown-item" onclick="logout()">Logout</a>
         </div>
@@ -155,6 +156,10 @@ function showPage(pageId) {
 
   if (pageId === 'questions') {
     loadSubjectsForChat();
+  }
+
+  if (pageId === 'classes') {
+    loadClasses();
   }
 }
 
@@ -269,11 +274,264 @@ function logout() {
 async function loadSubjects() {
   try {
     const response = await fetch(`${API_URL}/subjects`);
-    return await response.json();
+    if (response.ok) {
+      return await response.json();
+    }
   } catch (error) {
-    console.error('Load subjects error:', error);
-    return [];
+    console.error('Error loading subjects:', error);
   }
+  return [];
+}
+
+async function connectGoogle() {
+  try {
+    const response = await fetch(`${API_URL}/meets/auth/google?userId=${currentUser.id}`);
+    const data = await response.json();
+    if (data.url) {
+      localStorage.setItem('googleAuthUserId', currentUser.id);
+      window.location.href = data.url;
+    }
+  } catch (error) {
+    console.error('Google connect error:', error);
+    showToast('Failed to connect Google', 'error');
+  }
+}
+
+async function loadClasses() {
+  const classesContainer = document.getElementById('upcoming-classes-list');
+  if (!classesContainer) return;
+
+  try {
+    const response = await fetch(`${API_URL}/meets`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const data = await response.json();
+    
+    if (data.classes && data.classes.length > 0) {
+      classesContainer.innerHTML = data.classes.map(c => createClassCard(c)).join('');
+    } else {
+      classesContainer.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);">No upcoming classes</p>';
+    }
+  } catch (error) {
+    console.error('Load classes error:', error);
+    showToast('Failed to load classes', 'error');
+  }
+}
+
+async function loadClassHistory() {
+  const historyContainer = document.getElementById('class-history-list');
+  if (!historyContainer) return;
+
+  try {
+    const response = await fetch(`${API_URL}/meets/history`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const data = await response.json();
+    
+    if (data.classes && data.classes.length > 0) {
+      historyContainer.innerHTML = data.classes.map(c => createClassCard(c, true)).join('');
+    } else {
+      historyContainer.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);">No class history</p>';
+    }
+  } catch (error) {
+    console.error('Load class history error:', error);
+    showToast('Failed to load class history', 'error');
+  }
+}
+
+function createClassCard(classData, isHistory = false) {
+  const status = isHistory ? 'Completed' : (new Date(classData.scheduled_at) > new Date() ? 'Upcoming' : 'Live');
+  const statusClass = status.toLowerCase();
+  
+  return `
+    <div class="course-card" style="margin-bottom: 20px;">
+      <div class="course-thumbnail" style="background: ${isHistory ? 'linear-gradient(135deg, #666, #888)' : 'linear-gradient(135deg, var(--accent-orange), var(--accent-orange-light))'}">
+        ${isHistory ? '📹' : '🎥'}
+      </div>
+      <div class="course-content">
+        <h3>${classData.title}</h3>
+        <p>${classData.description || 'No description'}</p>
+        <div class="course-meta" style="margin-top: 10px;">
+          <span>📅 ${formatClassDate(classData.scheduled_at)}</span>
+          <span>⏱️ ${classData.duration} min</span>
+        </div>
+        <div style="margin-top: 10px;">
+          <span class="status-badge ${statusClass}">${status}</span>
+          ${classData.subject ? `<span class="tag">${classData.subject}</span>` : ''}
+        </div>
+        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+          ${classData.meet_link ? `<a href="${classData.meet_link}" target="_blank" class="btn btn-primary" style="flex:1;">Join Meeting</a>` : ''}
+          ${!isHistory && currentUser.role !== 'student' ? `<button class="btn btn-secondary" onclick="openClassModal(${classData.id})" style="flex:1;">View Details</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function formatClassDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { 
+    weekday: 'short', 
+    month: 'short', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+function openCreateClassModal() {
+  document.getElementById('createClassModal')?.classList.add('active');
+  loadSubjectsForClass();
+}
+
+function closeCreateClassModal() {
+  document.getElementById('createClassModal')?.classList.remove('active');
+}
+
+async function loadSubjectsForClass() {
+  const select = document.getElementById('classSubject');
+  if (!select || select.options.length > 1) return;
+  
+  const subjects = await loadSubjects();
+  subjects.forEach(s => {
+    const option = document.createElement('option');
+    option.value = s.name;
+    option.textContent = `${s.icon} ${s.name}`;
+    select.appendChild(option);
+  });
+}
+
+async function createNewClass(e) {
+  e.preventDefault();
+  
+  const title = document.getElementById('classTitle')?.value;
+  const description = document.getElementById('classDescription')?.value;
+  const scheduledAt = document.getElementById('classDateTime')?.value;
+  const duration = parseInt(document.getElementById('classDuration')?.value) || 60;
+  const subject = document.getElementById('classSubject')?.value;
+
+  if (!title || !scheduledAt) {
+    showToast('Please fill in all required fields', 'error');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/meets`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ title, description, scheduledAt, duration, subject })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      showToast('Class created successfully!', 'success');
+      closeCreateClassModal();
+      loadClasses();
+      
+      if (data.class.meet_link) {
+        window.open(data.class.meet_link, '_blank');
+      }
+    } else {
+      const error = await response.json();
+      showToast(error.error || 'Failed to create class', 'error');
+    }
+  } catch (error) {
+    console.error('Create class error:', error);
+    showToast('Failed to create class', 'error');
+  }
+}
+
+async function joinClass(classId) {
+  try {
+    const response = await fetch(`${API_URL}/meets/${classId}/enroll`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+
+    if (response.ok) {
+      showToast('Enrolled successfully!', 'success');
+    }
+  } catch (error) {
+    console.error('Join class error:', error);
+    showToast('Failed to join class', 'error');
+  }
+}
+
+let selectedClassId = null;
+
+function openClassModal(classId) {
+  selectedClassId = classId;
+  document.getElementById('classDetailModal')?.classList.add('active');
+  loadClassDetails(classId);
+}
+
+function closeClassModal() {
+  document.getElementById('classDetailModal')?.classList.remove('active');
+  selectedClassId = null;
+}
+
+async function loadClassDetails(classId) {
+  const detailsContainer = document.getElementById('classDetails');
+  if (!detailsContainer) return;
+
+  try {
+    const response = await fetch(`${API_URL}/meets/${classId}`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const data = await response.json();
+    
+    if (data.class) {
+      const c = data.class;
+      detailsContainer.innerHTML = `
+        <h2 style="margin-bottom: 20px;">${c.title}</h2>
+        <p style="margin-bottom: 15px; color: var(--text-secondary);">${c.description || 'No description'}</p>
+        <div style="margin-bottom: 15px;">
+          <strong>Teacher:</strong> ${c.teacher_name}
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Date:</strong> ${formatClassDate(c.scheduled_at)}
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Duration:</strong> ${c.duration} minutes
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Subject:</strong> ${c.subject || 'General'}
+        </div>
+        ${c.meet_link ? `<a href="${c.meet_link}" target="_blank" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">Join Google Meet</a>` : ''}
+        ${currentUser.role === 'admin' || currentUser.id === c.teacher_id ? `
+          <button onclick="deleteClass(${c.id})" class="btn btn-secondary" style="width: 100%;">Delete Class</button>
+        ` : ''}
+      `;
+    }
+  } catch (error) {
+    console.error('Load class details error:', error);
+  }
+}
+
+async function deleteClass(classId) {
+  if (!confirm('Are you sure you want to delete this class?')) return;
+
+  try {
+    const response = await fetch(`${API_URL}/meets/${classId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+
+    if (response.ok) {
+      showToast('Class deleted successfully', 'success');
+      closeClassModal();
+      loadClasses();
+    } else {
+      showToast('Failed to delete class', 'error');
+    }
+  } catch (error) {
+    console.error('Delete class error:', error);
+    showToast('Failed to delete class', 'error');
+  }
+}
 }
 
 async function loadCourses(subjectId = null) {
@@ -815,3 +1073,13 @@ window.loadSubjects = loadSubjects;
 window.uploadCourse = uploadCourse;
 window.toggleDropdown = toggleDropdown;
 window.showToast = showToast;
+window.connectGoogle = connectGoogle;
+window.loadClasses = loadClasses;
+window.loadClassHistory = loadClassHistory;
+window.createNewClass = createNewClass;
+window.joinClass = joinClass;
+window.openCreateClassModal = openCreateClassModal;
+window.closeCreateClassModal = closeCreateClassModal;
+window.formatClassDate = formatClassDate;
+window.openClassModal = openClassModal;
+window.closeClassModal = closeClassModal;

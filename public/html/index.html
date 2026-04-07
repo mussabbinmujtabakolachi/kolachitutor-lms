@@ -21,6 +21,7 @@
         <li><a href="#home" onclick="showPage('home')">Home</a></li>
         <li><a href="#courses" onclick="showPage('courses')">Courses</a></li>
         <li><a href="#questions" onclick="showPage('questions')">AI Questions</a></li>
+        <li><a href="#classes" onclick="showPage('classes')">Classes</a></li>
         <li><a href="#about">About</a></li>
       </ul>
     </nav>
@@ -39,6 +40,7 @@
     <a href="#home" onclick="showPage('home')">Home</a>
     <a href="#courses" onclick="showPage('courses')">Courses</a>
     <a href="#questions" onclick="showPage('questions')">AI Questions</a>
+    <a href="#classes" onclick="showPage('classes')">Classes</a>
     <a href="#about">About</a>
     <a href="#login" onclick="showPage('login')">Login</a>
   </nav>
@@ -186,6 +188,80 @@
           <button type="submit" class="btn-3d" style="width: 100%;">Register as Teacher</button>
         </form>
       </div>
+    </div>
+  </div>
+
+  <!-- Classes Page -->
+  <div id="classes" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Online Classes</h2>
+        <button class="btn btn-primary" onclick="openCreateClassModal()">+ Create Class</button>
+      </div>
+
+      <div class="tabs" style="margin-top: 30px;">
+        <button class="tab active" onclick="switchClassesTab('upcoming', event)">Upcoming Classes</button>
+        <button class="tab" onclick="switchClassesTab('history', event)">Class History</button>
+      </div>
+
+      <div id="upcoming-classes-list" style="margin-top: 20px;">
+        <div style="text-align: center; padding: 40px;">
+          <div class="loader" style="margin: 0 auto;"></div>
+        </div>
+      </div>
+
+      <div id="class-history-list" style="margin-top: 20px; display: none;">
+        <div style="text-align: center; padding: 40px;">
+          <div class="loader" style="margin: 0 auto;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Class Modal -->
+  <div id="createClassModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+      <h2 style="text-align: center; margin-bottom: 30px;">Create New Class</h2>
+      <form onsubmit="createNewClass(event)">
+        <div class="form-group">
+          <label>Class Title *</label>
+          <input type="text" id="classTitle" placeholder="e.g., Mathematics Class 101" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="classDescription" placeholder="What will be covered in this class?" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="classSubject">
+            <option value="">Select Subject</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date & Time *</label>
+          <input type="datetime-local" id="classDateTime" required>
+        </div>
+        <div class="form-group">
+          <label>Duration (minutes)</label>
+          <select id="classDuration">
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60" selected>60 minutes</option>
+            <option value="90">90 minutes</option>
+            <option value="120">120 minutes</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Class & Generate Meet Link</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeCreateClassModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Class Details Modal -->
+  <div id="classDetailModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div id="classDetails" style="text-align: left;"></div>
+      <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="closeClassModal()">Close</button>
     </div>
   </div>
 
@@ -613,6 +689,24 @@
     function switchAdminTab(tab) {
       document.querySelectorAll('#admin .tab').forEach(t => t.classList.remove('active'));
       event.target.classList.add('active');
+    }
+
+    function switchClassesTab(tab, event) {
+      document.querySelectorAll('#classes .tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const upcomingList = document.getElementById('upcoming-classes-list');
+      const historyList = document.getElementById('class-history-list');
+      
+      if (tab === 'upcoming') {
+        upcomingList.style.display = 'block';
+        historyList.style.display = 'none';
+        loadClasses();
+      } else if (tab === 'history') {
+        upcomingList.style.display = 'none';
+        historyList.style.display = 'block';
+        loadClassHistory();
+      }
     }
 
     // Close modals on outside click

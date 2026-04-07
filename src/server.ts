@@ -10,6 +10,7 @@ import subjectRoutes from './routes/subjects';
 import courseRoutes from './routes/courses';
 import questionRoutes from './routes/questions';
 import adminRoutes from './routes/admin';
+import meetRoutes from './routes/meets';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/meets', meetRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/html/index.html'));

@@ -39,6 +39,8 @@ const initDatabase = async () => {
         avatar VARCHAR(255),
         qualifications TEXT,
         bio TEXT,
+        google_access_token TEXT,
+        google_refresh_token TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -82,6 +84,30 @@ const initDatabase = async () => {
         ai_answer TEXT,
         subject_id INTEGER REFERENCES subjects(id) ON DELETE SET NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS classes (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        teacher_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        scheduled_at TIMESTAMP NOT NULL,
+        duration INTEGER DEFAULT 60,
+        meet_link VARCHAR(500),
+        google_event_id VARCHAR(255),
+        subject VARCHAR(255),
+        attendees JSONB DEFAULT '[]',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS class_attendees (
+        id SERIAL PRIMARY KEY,
+        class_id INTEGER REFERENCES classes(id) ON DELETE CASCADE,
+        student_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        attended BOOLEAN DEFAULT FALSE,
+        UNIQUE(class_id, student_id)
       );
 
       INSERT INTO subjects (name, description, icon) VALUES
