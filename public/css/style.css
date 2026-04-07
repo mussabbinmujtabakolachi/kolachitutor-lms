@@ -26,8 +26,6 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
-  z-index: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -135,9 +133,6 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.3s ease;
   position: relative;
   padding: 8px 12px;
-  cursor: pointer;
-  pointer-events: auto;
-  z-index: 1002;
 }
 
 .nav-links a::after {
@@ -951,14 +946,10 @@ h1, h2, h3, h4, h5, h6 {
 .page {
   display: none;
   animation: fadeIn 0.5s ease;
-  position: relative;
-  z-index: 1;
 }
 
 .page.active {
   display: block;
-  position: relative;
-  z-index: 1;
 }
 
 @keyframes fadeIn {

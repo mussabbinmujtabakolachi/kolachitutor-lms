@@ -14,7 +14,7 @@ async function loadAllCoursesOnLoad() {
     const response = await fetch(`${API_URL}/courses`);
     const courses = await response.json();
     const courseGrid = document.getElementById('courses-grid');
-    if (courseGrid && courses.length > 0) {
+    if (courseGrid && courses && courses.length > 0) {
       courseGrid.innerHTML = courses.map(c => `
         <div class="course-card">
           <div class="course-thumbnail">${c.subject_icon || '📚'}</div>
@@ -29,6 +29,8 @@ async function loadAllCoursesOnLoad() {
           </div>
         </div>
       `).join('');
+    } else if (courseGrid) {
+      courseGrid.innerHTML = '<p style="text-align:center; padding:40px;">No courses available yet.</p>';
     }
   } catch (error) {
     console.error('Error:', error);
@@ -531,7 +533,6 @@ async function deleteClass(classId) {
     console.error('Delete class error:', error);
     showToast('Failed to delete class', 'error');
   }
-}
 }
 
 async function loadCourses(subjectId = null) {
