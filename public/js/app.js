@@ -118,6 +118,12 @@ function updateUIForLoggedInUser() {
     if (adminNav) {
       adminNav.style.display = currentUser.role === 'admin' ? 'block' : 'none';
     }
+    
+    // Show Classes nav link
+    const navClasses = document.getElementById('nav-classes');
+    const mobileNavClasses = document.getElementById('mobile-nav-classes');
+    if (navClasses) navClasses.style.display = 'block';
+    if (mobileNavClasses) mobileNavClasses.style.display = 'block';
   }
 }
 
@@ -271,6 +277,12 @@ function logout() {
       <a href="#student-register" class="btn btn-primary">Sign Up</a>
     `;
   }
+  
+  // Hide Classes nav link
+  const navClasses = document.getElementById('nav-classes');
+  const mobileNavClasses = document.getElementById('mobile-nav-classes');
+  if (navClasses) navClasses.style.display = 'none';
+  if (mobileNavClasses) mobileNavClasses.style.display = 'none';
 }
 
 async function loadSubjects() {
