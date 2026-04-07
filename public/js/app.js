@@ -382,8 +382,17 @@ function formatClassDate(dateStr) {
 }
 
 function openCreateClassModal() {
-  document.getElementById('createClassModal')?.classList.add('active');
+  const modal = document.getElementById('createClassModal');
+  modal?.classList.add('active');
   loadSubjectsForClass();
+  
+  const dateTimeInput = document.getElementById('classDateTime');
+  if (dateTimeInput && !dateTimeInput.value) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(10, 0, 0, 0);
+    dateTimeInput.value = tomorrow.toISOString().slice(0, 16);
+  }
 }
 
 function closeCreateClassModal() {
