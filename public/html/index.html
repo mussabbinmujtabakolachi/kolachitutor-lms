@@ -322,12 +322,126 @@
     <div class="dashboard">
       <div class="dashboard-header">
         <h2>Course <span>Library</span></h2>
-        <button class="btn btn-primary" onclick="showUploadModal()" id="upload-btn">Upload Course</button>
+        <button class="btn btn-primary" onclick="showCreateCourseModal()" id="create-course-btn" style="display:none;">+ New Course</button>
       </div>
 
-      <div class="courses-grid" id="courses-grid">
-        <!-- Courses will be loaded dynamically -->
+      <div class="tabs" id="courses-tabs" style="display:none;">
+        <button class="tab active" onclick="switchCourseTab('all', event)">All Courses</button>
+        <button class="tab" onclick="switchCourseTab('details', event)">Detailed Courses</button>
       </div>
+
+      <div id="all-courses-list" style="margin-top: 20px;">
+        <div class="courses-grid" id="courses-grid">
+          <!-- Courses will be loaded dynamically -->
+        </div>
+      </div>
+
+      <div id="detailed-courses-list" style="margin-top: 20px; display: none;">
+        <div class="courses-grid" id="detailed-courses-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Detail Page -->
+  <div id="course-detail" class="page">
+    <div class="dashboard" style="padding-top: 80px;">
+      <button class="btn btn-secondary" onclick="showPage('courses')" style="margin-bottom: 20px;">← Back to Courses</button>
+      
+      <div id="course-detail-content">
+        <!-- Course detail will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Course Modal -->
+  <div id="createCourseModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; color: black;">
+      <h2 style="text-align: center; margin-bottom: 30px;">Create New Course</h2>
+      <form onsubmit="createNewCourse(event)">
+        <div class="form-group">
+          <label>Course Title *</label>
+          <input type="text" id="newCourseTitle" placeholder="e.g., Mathematics 101" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="newCourseDescription" placeholder="Course description..." rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="newCourseSubject">
+            <option value="">Select Subject</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Course</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeCreateCourseModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create Folder Modal -->
+  <div id="createFolderModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; color: black;">
+      <h3 style="text-align: center; margin-bottom: 20px;">Create Folder</h3>
+      <form onsubmit="createNewFolder(event)">
+        <div class="form-group">
+          <label>Course</label>
+          <select id="folderCourseId" required>
+            <option value="">Select Course</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Folder Name *</label>
+          <input type="text" id="folderName" placeholder="e.g., Notes, Assignments" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Folder</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeCreateFolderModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Upload Resource Modal -->
+  <div id="uploadResourceModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; color: black;">
+      <h3 style="text-align: center; margin-bottom: 20px;">Upload Resource</h3>
+      <form onsubmit="uploadResourceFile(event)">
+        <div class="form-group">
+          <label>Course *</label>
+          <select id="resourceCourseId" required onchange="loadFoldersForResource()">
+            <option value="">Select Course</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Folder</label>
+          <select id="resourceFolderId">
+            <option value="">No Folder (Root)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Resource Title *</label>
+          <input type="text" id="resourceTitle" placeholder="Resource name" required>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="resourceTypeSelect">
+            <option value="file">File Upload</option>
+            <option value="link">External Link</option>
+          </select>
+        </div>
+        <div id="file-upload-section">
+          <div class="form-group">
+            <label>Select File *</label>
+            <input type="file" id="resourceFile" style="background: white; color: black;">
+          </div>
+        </div>
+        <div id="link-upload-section" style="display: none;">
+          <div class="form-group">
+            <label>Link URL *</label>
+            <input type="url" id="resourceLinkUrl" placeholder="https://...">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Upload Resource</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeUploadResourceModal()">Cancel</button>
+      </form>
     </div>
   </div>
 

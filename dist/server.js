@@ -15,6 +15,7 @@ const courses_1 = __importDefault(require("./routes/courses"));
 const questions_1 = __importDefault(require("./routes/questions"));
 const admin_1 = __importDefault(require("./routes/admin"));
 const meets_1 = __importDefault(require("./routes/meets"));
+const courseDetails_1 = __importDefault(require("./routes/courseDetails"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ app.use('/api/courses', courses_1.default);
 app.use('/api/questions', questions_1.default);
 app.use('/api/admin', admin_1.default);
 app.use('/api/meets', meets_1.default);
+app.use('/api/course-details', courseDetails_1.default);
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../public/html/index.html'));
 });

@@ -11,6 +11,7 @@ import courseRoutes from './routes/courses';
 import questionRoutes from './routes/questions';
 import adminRoutes from './routes/admin';
 import meetRoutes from './routes/meets';
+import courseDetailRoutes from './routes/courseDetails';
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/meets', meetRoutes);
+app.use('/api/course-details', courseDetailRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/html/index.html'));

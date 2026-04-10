@@ -110,6 +110,49 @@ export const initDatabase = async () => {
         UNIQUE(class_id, student_id)
       );
 
+      CREATE TABLE IF NOT EXISTS course_details (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        thumbnail VARCHAR(255),
+        teacher_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        subject VARCHAR(255),
+        is_published BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS course_folders (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        course_id INTEGER REFERENCES course_details(id) ON DELETE CASCADE,
+        parent_id INTEGER REFERENCES course_folders(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS course_resources (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        file_path VARCHAR(500),
+        file_name VARCHAR(255),
+        file_type VARCHAR(100),
+        file_size BIGINT,
+        resource_type VARCHAR(50) DEFAULT 'file',
+        folder_id INTEGER REFERENCES course_folders(id) ON DELETE CASCADE,
+        course_id INTEGER REFERENCES course_details(id) ON DELETE CASCADE,
+        uploaded_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS course_lessons (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        content TEXT,
+        course_id INTEGER REFERENCES course_details(id) ON DELETE CASCADE,
+        order_index INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
       INSERT INTO subjects (name, description, icon) VALUES
         ('Mathematics', 'Advanced Mathematics courses', '📐'),
         ('Physics', 'Physics and Applied Physics', '⚛️'),
