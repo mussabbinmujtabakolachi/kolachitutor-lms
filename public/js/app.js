@@ -124,6 +124,12 @@ function updateUIForLoggedInUser() {
     const mobileNavClasses = document.getElementById('mobile-nav-classes');
     if (navClasses) navClasses.style.display = 'block';
     if (mobileNavClasses) mobileNavClasses.style.display = 'block';
+    
+    // Show course tabs and create button
+    const courseTabs = document.getElementById('courses-tabs');
+    const createCourseBtn = document.getElementById('create-course-btn');
+    if (courseTabs) courseTabs.style.display = 'flex';
+    if (createCourseBtn) createCourseBtn.style.display = 'inline-flex';
   }
 }
 
@@ -283,6 +289,12 @@ function logout() {
   const mobileNavClasses = document.getElementById('mobile-nav-classes');
   if (navClasses) navClasses.style.display = 'none';
   if (mobileNavClasses) mobileNavClasses.style.display = 'none';
+  
+  // Hide course tabs and create button
+  const courseTabs = document.getElementById('courses-tabs');
+  const createCourseBtn = document.getElementById('create-course-btn');
+  if (courseTabs) courseTabs.style.display = 'none';
+  if (createCourseBtn) createCourseBtn.style.display = 'none';
 }
 
 async function loadSubjects() {
