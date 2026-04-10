@@ -128,8 +128,10 @@ function updateUIForLoggedInUser() {
     // Show course tabs and create button
     const courseTabs = document.getElementById('courses-tabs');
     const createCourseBtn = document.getElementById('create-course-btn');
+    const uploadCourseBtn = document.getElementById('upload-course-btn');
     if (courseTabs) courseTabs.style.display = 'flex';
     if (createCourseBtn) createCourseBtn.style.display = 'inline-flex';
+    if (uploadCourseBtn) uploadCourseBtn.style.display = 'inline-flex';
   }
 }
 
@@ -293,8 +295,10 @@ function logout() {
   // Hide course tabs and create button
   const courseTabs = document.getElementById('courses-tabs');
   const createCourseBtn = document.getElementById('create-course-btn');
+  const uploadCourseBtn = document.getElementById('upload-course-btn');
   if (courseTabs) courseTabs.style.display = 'none';
   if (createCourseBtn) createCourseBtn.style.display = 'none';
+  if (uploadCourseBtn) uploadCourseBtn.style.display = 'none';
 }
 
 async function loadSubjects() {
@@ -1058,6 +1062,21 @@ async function loadTeachers() {
   }
 }
 
+function showUploadModal() {
+  const modal = document.getElementById('upload-modal');
+  if (modal) {
+    modal.classList.add('active');
+    loadSubjectsForRegistration();
+  }
+}
+
+function closeUploadModal() {
+  const modal = document.getElementById('upload-modal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
 function showToast(message, type = 'info') {
   const existingToast = document.querySelector('.toast');
   existingToast?.remove();
@@ -1630,6 +1649,8 @@ window.loadSubjects = loadSubjects;
 window.uploadCourse = uploadCourse;
 window.toggleDropdown = toggleDropdown;
 window.showToast = showToast;
+window.showUploadModal = showUploadModal;
+window.closeUploadModal = closeUploadModal;
 window.connectGoogle = connectGoogle;
 window.loadClasses = loadClasses;
 window.loadClassHistory = loadClassHistory;

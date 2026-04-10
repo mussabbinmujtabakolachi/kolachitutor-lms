@@ -322,7 +322,10 @@
     <div class="dashboard">
       <div class="dashboard-header">
         <h2>Course <span>Library</span></h2>
-        <button class="btn btn-primary" onclick="showCreateCourseModal()" id="create-course-btn" style="display:none;">+ New Course</button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary" onclick="showUploadModal()" id="upload-course-btn" style="display:none;">📤 Upload Course</button>
+          <button class="btn btn-primary" onclick="showCreateCourseModal()" id="create-course-btn" style="display:none;">+ New Course</button>
+        </div>
       </div>
 
       <div class="tabs" id="courses-tabs" style="display:none;">
