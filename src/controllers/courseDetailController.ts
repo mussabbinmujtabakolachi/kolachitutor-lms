@@ -49,15 +49,25 @@ export const getCourseDetails = async (req: Request, res: Response) => {
 };
 
 export const getAllCourseDetails = async (req: Request, res: Response) => {
+  const userId = (req as any).user?.id;
+  const { myCourses } = req.query;
+
   try {
-    const result = await pool.query(
-      `SELECT cd.*, u.full_name as teacher_name,
+    let query = `
+      SELECT cd.*, u.full_name as teacher_name,
               (SELECT COUNT(*) FROM course_folders WHERE course_id = cd.id) as folder_count,
               (SELECT COUNT(*) FROM course_resources WHERE course_id = cd.id) as resource_count
        FROM course_details cd
        LEFT JOIN users u ON cd.teacher_id = u.id
-       ORDER BY cd.created_at DESC`
-    );
+    `;
+    
+    if (myCourses === 'true' && userId) {
+      query += ` WHERE cd.teacher_id = $1`;
+      const result = await pool.query(query + ` ORDER BY cd.created_at DESC`, [userId]);
+      return res.json(result.rows);
+    }
+    
+    const result = await pool.query(query + ` ORDER BY cd.created_at DESC`);
     res.json(result.rows);
   } catch (error) {
     console.error('Get all courses error:', error);

@@ -808,17 +808,16 @@ async function downloadCourse(courseId, fileName) {
 
 async function uploadCourse(formData) {
   try {
-    const response = await fetch(`${API_URL}/courses`, {
+    const response = await fetch(`${API_URL}/course-details/resources/upload`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
       body: formData
     });
 
     if (response.ok) {
-      showToast('Course uploaded successfully!', 'success');
+      showToast('Resource uploaded successfully!', 'success');
       closeUploadModal();
-      loadCoursesForStudent();
-      loadStats();
+      loadDetailedCourses();
     } else {
       showToast('Upload failed', 'error');
     }
@@ -1066,7 +1065,36 @@ function showUploadModal() {
   const modal = document.getElementById('upload-modal');
   if (modal) {
     modal.classList.add('active');
-    loadSubjectsForRegistration();
+    loadMyCoursesForUpload();
+  }
+}
+
+async function loadMyCoursesForUpload() {
+  const select = document.getElementById('course-subject');
+  if (!select) return;
+  
+  select.innerHTML = '<option value="">Select Course</option>';
+  
+  try {
+    const response = await fetch(`${API_URL}/course-details?myCourses=true`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const courses = await response.json();
+    
+    if (courses.length === 0) {
+      select.innerHTML = '<option value="">No courses created yet</option>';
+      showToast('Please create a course first using "New Course"', 'error');
+      return;
+    }
+    
+    courses.forEach(c => {
+      const option = document.createElement('option');
+      option.value = c.id;
+      option.textContent = `${c.title} ${c.subject ? '(' + c.subject + ')' : ''}`;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Load my courses error:', error);
   }
 }
 

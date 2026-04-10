@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 export declare const getCourseDetails: (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
-export declare const getAllCourseDetails: (req: Request, res: Response) => Promise<void>;
+export declare const getAllCourseDetails: (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
 export declare const createCourseDetail: (req: Request, res: Response) => Promise<void>;
 export declare const updateCourseDetail: (req: Request, res: Response) => Promise<void>;
 export declare const deleteCourseDetail: (req: Request, res: Response) => Promise<void>;
