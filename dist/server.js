@@ -39,6 +39,9 @@ app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../public/html/index.html'));
 });
 const startServer = async () => {
+    app.listen(PORT, () => {
+        console.log(`Kolachi Tutors LMS running on port ${PORT}`);
+    });
     try {
         await (0, database_1.initDatabase)();
         const bcrypt = require('bcryptjs');
@@ -48,13 +51,10 @@ const startServer = async () => {
       VALUES ($1, $2, 'Admin', 'admin')
       ON CONFLICT (email) DO NOTHING
     `, [process.env.ADMIN_EMAIL || 'admin@kolachi.edu.pk', adminPassword]);
-        app.listen(PORT, () => {
-            console.log(`Kolachi Tutors LMS running on port ${PORT}`);
-        });
+        console.log('Admin user ensured');
     }
     catch (error) {
-        console.error('Failed to start server:', error);
-        process.exit(1);
+        console.error('Database initialization failed (app will continue running):', error);
     }
 };
 startServer();

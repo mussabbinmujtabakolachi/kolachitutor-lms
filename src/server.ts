@@ -43,6 +43,10 @@ app.get('*', (req, res) => {
 });
 
 const startServer = async () => {
+  app.listen(PORT, () => {
+    console.log(`Kolachi Tutors LMS running on port ${PORT}`);
+  });
+
   try {
     await initDatabase();
     
@@ -55,12 +59,9 @@ const startServer = async () => {
       ON CONFLICT (email) DO NOTHING
     `, [process.env.ADMIN_EMAIL || 'admin@kolachi.edu.pk', adminPassword]);
 
-    app.listen(PORT, () => {
-      console.log(`Kolachi Tutors LMS running on port ${PORT}`);
-    });
+    console.log('Admin user ensured');
   } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
+    console.error('Database initialization failed (app will continue running):', error);
   }
 };
 
