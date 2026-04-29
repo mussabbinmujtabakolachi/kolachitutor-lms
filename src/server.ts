@@ -43,12 +43,10 @@ app.get('*', (req, res) => {
 });
 
 const startServer = async () => {
-  app.listen(PORT, () => {
-    console.log(`Kolachi Tutors LMS running on port ${PORT}`);
-  });
-
   try {
+    console.log('Connecting to database...');
     await initDatabase();
+    console.log('Database connected and initialized');
     
     const bcrypt = require('bcryptjs');
     const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin123', 10);
@@ -61,8 +59,13 @@ const startServer = async () => {
 
     console.log('Admin user ensured');
   } catch (error) {
-    console.error('Database initialization failed (app will continue running):', error);
+    console.error('Database initialization error:', error);
+    console.error('Error details:', JSON.stringify(error));
   }
+
+  app.listen(PORT, () => {
+    console.log(`Kolachi Tutors LMS running on port ${PORT}`);
+  });
 };
 
 startServer();

@@ -27,7 +27,9 @@ else {
 exports.pool = new pg_1.Pool(poolConfig);
 const initDatabase = async () => {
     const client = await exports.pool.connect();
+    console.log('Database connection established');
     try {
+        console.log('Creating tables...');
         await client.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -152,7 +154,10 @@ const initDatabase = async () => {
         order_index INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-
+    `);
+        console.log('Tables created');
+        console.log('Inserting subjects...');
+        await client.query(`
       INSERT INTO subjects (name, description, icon) VALUES
         ('Mathematics', 'Advanced Mathematics courses', '📐'),
         ('Physics', 'Physics and Applied Physics', '⚛️'),
@@ -166,6 +171,7 @@ const initDatabase = async () => {
         ('Economics', 'Economics and Commerce', '📈')
       ON CONFLICT DO NOTHING;
     `);
+        console.log('Subjects inserted');
         console.log('Database initialized successfully');
     }
     catch (error) {
