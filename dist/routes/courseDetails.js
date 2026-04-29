@@ -27,10 +27,17 @@ router.put('/:id', auth_1.authenticate, courseDetailController_1.updateCourseDet
 router.delete('/:id', auth_1.authenticate, courseDetailController_1.deleteCourseDetail);
 router.post('/folders', auth_1.authenticate, courseDetailController_1.createFolder);
 router.get('/folders/list', courseDetailController_1.getFolders);
+router.get('/folders/tree', courseDetailController_1.getAllFoldersTree);
+router.get('/folders/contents', courseDetailController_1.getFolderContents);
+router.get('/folders/path', courseDetailController_1.getFolderPath);
+router.put('/folders/:id', auth_1.authenticate, courseDetailController_1.renameFolder);
+router.put('/folders/:id/move', auth_1.authenticate, courseDetailController_1.moveFolder);
 router.delete('/folders/:id', auth_1.authenticate, courseDetailController_1.deleteFolder);
 router.post('/resources/upload', auth_1.authenticate, upload.single('file'), courseDetailController_1.uploadResource);
 router.post('/resources/link', auth_1.authenticate, courseDetailController_1.createLinkResource);
 router.get('/resources/list', courseDetailController_1.getResources);
+router.put('/resources/:id', auth_1.authenticate, courseDetailController_1.renameResource);
+router.put('/resources/:id/move', auth_1.authenticate, courseDetailController_1.moveResource);
 router.delete('/resources/:id', auth_1.authenticate, courseDetailController_1.deleteResource);
 router.post('/lessons', auth_1.authenticate, courseDetailController_1.createLesson);
 router.get('/lessons/list', courseDetailController_1.getLessons);

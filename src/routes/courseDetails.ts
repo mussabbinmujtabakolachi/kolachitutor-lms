@@ -12,10 +12,17 @@ import {
   createFolder,
   getFolders,
   deleteFolder,
+  renameFolder,
+  moveFolder,
+  getFolderContents,
+  getFolderPath,
+  getAllFoldersTree,
   uploadResource,
   createLinkResource,
   getResources,
   deleteResource,
+  moveResource,
+  renameResource,
   createLesson,
   getLessons,
   updateLesson,
@@ -44,11 +51,18 @@ router.delete('/:id', authenticate, deleteCourseDetail);
 
 router.post('/folders', authenticate, createFolder);
 router.get('/folders/list', getFolders);
+router.get('/folders/tree', getAllFoldersTree);
+router.get('/folders/contents', getFolderContents);
+router.get('/folders/path', getFolderPath);
+router.put('/folders/:id', authenticate, renameFolder);
+router.put('/folders/:id/move', authenticate, moveFolder);
 router.delete('/folders/:id', authenticate, deleteFolder);
 
 router.post('/resources/upload', authenticate, upload.single('file'), uploadResource);
 router.post('/resources/link', authenticate, createLinkResource);
 router.get('/resources/list', getResources);
+router.put('/resources/:id', authenticate, renameResource);
+router.put('/resources/:id/move', authenticate, moveResource);
 router.delete('/resources/:id', authenticate, deleteResource);
 
 router.post('/lessons', authenticate, createLesson);

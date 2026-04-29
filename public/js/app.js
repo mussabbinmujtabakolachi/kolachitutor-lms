@@ -1226,64 +1226,22 @@ async function showCourseDetail(courseId) {
       </div>
 
       <div id="course-resources-${courseId}" class="course-tab-content" style="display: none;">
-        <div style="background: white; border-radius: 20px; padding: 30px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3>Resources</h3>
-            <div style="display: flex; gap: 10px;">
-              <button class="btn btn-secondary" onclick="showCreateFolderModal(${courseId})" style="display: ${currentUser && currentUser.role === 'admin' ? 'inline-flex' : 'none'};">+ Folder</button>
-              <button class="btn btn-primary" onclick="showUploadResourceModal(${courseId})" style="display: ${currentUser && currentUser.role === 'admin' ? 'inline-flex' : 'none'};">+ Upload</button>
-            </div>
+        <div class="resources-toolbar" style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-secondary" onclick="showCreateFolderModal(${courseId})" style="display: ${currentUser && currentUser.role === 'admin' ? 'inline-flex' : 'none'};">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 5px;"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-2 6h-2v2h2v2h-2v2h-2v-2h2v-2h-2v-2h2v-2h-2V8h2v2h2v2z"/></svg>
+              New Folder
+            </button>
+            <button class="btn btn-primary" onclick="showUploadResourceModal(${courseId})" style="display: ${currentUser && currentUser.role === 'admin' ? 'inline-flex' : 'none'};">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 5px;"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+              Upload
+            </button>
           </div>
-          
-          ${folders.length > 0 ? folders.map(f => {
-            const folderResources = resources.filter(r => r.folder_id === f.id);
-            return `
-              <div style="border: 2px solid var(--accent-orange); border-radius: 15px; margin-bottom: 15px; overflow: hidden;">
-                <div style="background: linear-gradient(135deg, var(--accent-orange), var(--accent-orange-light)); padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white;">
-                  <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 1.5rem;">📁</span>
-                    <span style="font-weight: bold;">${f.name}</span>
-                    <span style="background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 10px; font-size: 0.85rem;">${folderResources.length}</span>
-                  </div>
-                  ${currentUser && currentUser.role === 'admin' ? `<button onclick="deleteFolder(${f.id})" style="background: none; border: none; color: white; cursor: pointer;">🗑️</button>` : ''}
-                </div>
-                <div style="padding: 15px;">
-                  ${folderResources.length > 0 ? folderResources.map(r => `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee;">
-                      <div style="display: flex; align-items: center; gap: 10px;">
-                        <span>${getResourceIcon(r.file_type)}</span>
-                        <span>${r.title}</span>
-                      </div>
-                      <div style="display: flex; gap: 10px;">
-                        ${r.resource_type === 'link' ? `<a href="${r.file_path}" target="_blank" class="btn btn-secondary" style="padding: 5px 10px;">Open</a>` : `<a href="${r.file_path}" download class="btn btn-secondary" style="padding: 5px 10px;">Download</a>`}
-                        ${currentUser && currentUser.role === 'admin' ? `<button onclick="deleteResource(${r.id})" style="background: none; border: none; color: red; cursor: pointer;">🗑️</button>` : ''}
-                      </div>
-                    </div>
-                  `).join('') : '<p style="color: #999; text-align: center;">No resources in this folder.</p>'}
-                </div>
-              </div>
-            `;
-          }).join('') : ''}
-          
-          ${resources.filter(r => !r.folder_id).length > 0 ? `
-            <div style="margin-top: 20px;">
-              <h4 style="margin-bottom: 10px;">Root Resources (No Folder)</h4>
-              ${resources.filter(r => !r.folder_id).map(r => `
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px;">
-                  <div style="display: flex; align-items: center; gap: 10px;">
-                    <span>${getResourceIcon(r.file_type)}</span>
-                    <span>${r.title}</span>
-                  </div>
-                  <div style="display: flex; gap: 10px;">
-                    ${r.resource_type === 'link' ? `<a href="${r.file_path}" target="_blank" class="btn btn-secondary" style="padding: 5px 10px;">Open</a>` : `<a href="${r.file_path}" download class="btn btn-secondary" style="padding: 5px 10px;">Download</a>`}
-                    ${currentUser && currentUser.role === 'admin' ? `<button onclick="deleteResource(${r.id})" style="background: none; border: none; color: red; cursor: pointer;">🗑️</button>` : ''}
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-          
-          ${folders.length === 0 && resources.filter(r => !r.folder_id).length === 0 ? '<p style="color: #999; text-align: center;">No resources uploaded yet.</p>' : ''}
+        </div>
+        <div id="resources-drive-${courseId}">
+          <div style="background: white; border-radius: 20px; padding: 30px; text-align: center;">
+            <div class="loader" style="margin: 0 auto;"></div>
+          </div>
         </div>
       </div>
     `;
@@ -1308,7 +1266,15 @@ function switchDetailTab(tab, event, courseId) {
   document.querySelectorAll('.course-tab-content').forEach(t => t.style.display = 'none');
   document.querySelectorAll(`#course-detail .tab`).forEach(t => t.classList.remove('active'));
   event.target.classList.add('active');
-  document.getElementById(`course-${tab}-${courseId}`).style.display = 'block';
+  const tabContent = document.getElementById(`course-${tab}-${courseId}`);
+  tabContent.style.display = 'block';
+  
+  if (tab === 'resources') {
+    const driveContainer = document.getElementById(`resources-drive-${courseId}`);
+    if (driveContainer && driveContainer.querySelector('.drive-container') === null) {
+      loadResourcesTab(courseId);
+    }
+  }
 }
 
 function switchCourseTab(tab, event) {
@@ -1385,6 +1351,14 @@ async function createNewCourse(e) {
 function showCreateFolderModal(courseId = null) {
   document.getElementById('createFolderModal').classList.add('active');
   loadCoursesForFolder(courseId);
+  
+  const currentFolder = currentFolderStack[courseId];
+  const parentIdInput = document.getElementById('folderParentId');
+  if (parentIdInput) {
+    parentIdInput.value = currentFolder && currentFolder.length > 0 
+      ? currentFolder[currentFolder.length - 1].id 
+      : '';
+  }
 }
 
 function closeCreateFolderModal() {
@@ -1416,8 +1390,9 @@ async function loadCoursesForFolder(preselectedId = null) {
 async function createNewFolder(e) {
   e.preventDefault();
   
-  const courseId = document.getElementById('folderCourseId')?.value;
+  const courseId = parseInt(document.getElementById('folderCourseId')?.value);
   const name = document.getElementById('folderName')?.value;
+  const parentId = document.getElementById('folderParentId')?.value || null;
 
   if (!courseId || !name) {
     showToast('Please fill in all fields', 'error');
@@ -1431,13 +1406,16 @@ async function createNewFolder(e) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({ name, courseId })
+      body: JSON.stringify({ name, courseId, parentId })
     });
 
     if (response.ok) {
       showToast('Folder created successfully!', 'success');
       closeCreateFolderModal();
-      showCourseDetail(parseInt(courseId));
+      
+      const folderId = parentId ? parseInt(parentId) : null;
+      loadFolderContents(courseId, folderId);
+      loadFolderTree(courseId);
     } else {
       showToast('Failed to create folder', 'error');
     }
@@ -1570,7 +1548,12 @@ async function uploadResourceFile(e) {
     if (response.ok) {
       showToast('Resource uploaded successfully!', 'success');
       closeUploadResourceModal();
-      showCourseDetail(parseInt(courseId));
+      
+      const cid = parseInt(courseId);
+      const folderId = currentFolderStack[cid]?.length > 0 
+        ? currentFolderStack[cid][currentFolderStack[cid].length - 1].id 
+        : null;
+      loadFolderContents(cid, folderId);
     } else {
       showToast('Failed to upload resource', 'error');
     }
@@ -1709,3 +1692,562 @@ window.deleteResource = deleteResource;
 window.deleteFolder = deleteFolder;
 window.deleteCourse = deleteCourse;
 window.deleteLesson = deleteLesson;
+
+let resourcesViewMode = 'grid';
+let currentFolderStack = [];
+let resourcesCourseId = null;
+
+async function loadResourcesTab(courseId, folderId = null) {
+  resourcesCourseId = courseId;
+  const container = document.getElementById(`course-resources-${courseId}`);
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="drive-container" id="drive-container-${courseId}">
+      <div class="drive-sidebar" id="drive-sidebar-${courseId}">
+        <div class="sidebar-header">
+          <h4>My Drive</h4>
+        </div>
+        <div class="folder-tree" id="folder-tree-${courseId}">
+          <div class="folder-loading">Loading folders...</div>
+        </div>
+      </div>
+      <div class="drive-main" id="drive-main-${courseId}">
+        <div class="drive-toolbar">
+          <div class="breadcrumb" id="breadcrumb-${courseId}">
+            <span class="breadcrumb-item" onclick="navigateToFolder('${courseId}', null)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+              Resources
+            </span>
+          </div>
+          <div class="toolbar-actions">
+            <div class="search-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              <input type="text" placeholder="Search in folder..." onkeyup="searchResources(${courseId})" id="resource-search-${courseId}">
+            </div>
+            <div class="view-toggle">
+              <button class="view-btn ${resourcesViewMode === 'grid' ? 'active' : ''}" onclick="setResourcesView('grid', ${courseId})" title="Grid view">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+              </button>
+              <button class="view-btn ${resourcesViewMode === 'list' ? 'active' : ''}" onclick="setResourcesView('list', ${courseId})" title="List view">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="drive-content" id="drive-content-${courseId}" 
+             ondragover="handleDragOver(event, ${courseId})" 
+             ondragleave="handleDragLeave(event)" 
+             ondrop="handleDrop(event, ${courseId})">
+          <div class="drive-loading">Loading...</div>
+          <div class="drop-overlay" id="drop-overlay-${courseId}" style="display: none;">
+            <div class="drop-message">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="#1a73e8"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+              <p>Drop files to upload</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  await loadFolderTree(courseId);
+  await loadFolderContents(courseId, folderId);
+}
+
+function handleDragOver(event, courseId) {
+  event.preventDefault();
+  event.stopPropagation();
+  const overlay = document.getElementById(`drop-overlay-${courseId}`);
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function handleDragLeave(event, courseId) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (!event.relatedTarget || !event.target.closest('.drive-content')) {
+    const overlay = document.getElementById(`drop-overlay-${courseId}`);
+    if (overlay) overlay.style.display = 'none';
+  }
+}
+
+async function handleDrop(event, courseId) {
+  event.preventDefault();
+  event.stopPropagation();
+  const overlay = document.getElementById(`drop-overlay-${courseId}`);
+  if (overlay) overlay.style.display = 'none';
+
+  const files = event.dataTransfer.files;
+  if (files.length === 0) return;
+
+  const folderId = currentFolderStack[courseId]?.length > 0 
+    ? currentFolderStack[courseId][currentFolderStack[courseId].length - 1].id 
+    : null;
+
+  showToast(`Uploading ${files.length} file(s)...`, 'info');
+
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append('title', file.name);
+    formData.append('courseId', courseId);
+    formData.append('folderId', folderId || '');
+    formData.append('resourceType', 'file');
+    formData.append('file', file);
+
+    try {
+      const response = await fetch(`${API_URL}/course-details/resources/upload`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('Drag & drop upload error:', error);
+      showToast(`Failed to upload ${file.name}`, 'error');
+    }
+  }
+
+  showToast('Files uploaded successfully!', 'success');
+  loadFolderContents(courseId, folderId);
+}
+
+window.handleDragOver = handleDragOver;
+window.handleDragLeave = handleDragLeave;
+window.handleDrop = handleDrop;
+
+async function loadFolderTree(courseId) {
+  try {
+    const response = await fetch(`${API_URL}/course-details/folders/tree?courseId=${courseId}`);
+    const folders = await response.json();
+    const container = document.getElementById(`folder-tree-${courseId}`);
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="folder-item ${!currentFolderStack[courseId] ? 'active' : ''}" onclick="navigateToFolder('${courseId}', null)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#5f6368"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+        <span>All Files</span>
+      </div>
+      ${renderFolderTree(folders, courseId, null)}
+    `;
+  } catch (error) {
+    console.error('Load folder tree error:', error);
+  }
+}
+
+function renderFolderTree(folders, courseId, parentId) {
+  const children = folders.filter(f => f.parent_id === parentId);
+  if (children.length === 0) return '';
+
+  return children.map(f => {
+    const currentPath = currentFolderStack[courseId];
+    const isActive = currentPath && currentPath.length > 0 && currentPath[currentPath.length - 1].id === f.id;
+    return `
+      <div class="folder-item ${isActive ? 'active' : ''}" onclick="navigateToFolder('${courseId}', ${f.id})">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#5f6368"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+        <span>${f.name}</span>
+      </div>
+      ${f.children && f.children.length > 0 ? `<div class="folder-children">${renderFolderTree(folders, courseId, f.id)}</div>` : ''}
+    `;
+  }).join('');
+}
+
+async function loadFolderContents(courseId, folderId = null) {
+  const container = document.getElementById(`drive-content-${courseId}`);
+  if (!container) return;
+
+  container.innerHTML = '<div class="drive-loading">Loading...</div>';
+
+  try {
+    const params = new URLSearchParams({ courseId });
+    if (folderId) params.append('folderId', folderId);
+    
+    const response = await fetch(`${API_URL}/course-details/folders/contents?${params}`);
+    const data = await response.json();
+    
+    const { folders, resources } = data;
+    
+    if (folders.length === 0 && resources.length === 0) {
+      container.innerHTML = `
+        <div class="drive-empty">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="#dadce0"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6V10h12v2z"/></svg>
+          <p>This folder is empty</p>
+          <p class="drive-empty-hint">Upload files or create folders to get started</p>
+        </div>
+      `;
+      return;
+    }
+
+    if (resourcesViewMode === 'grid') {
+      container.innerHTML = `
+        <div class="drive-grid">
+          ${folders.map(f => renderFolderCard(f, 'folder', courseId)).join('')}
+          ${resources.map(r => renderFileCard(r, 'file', courseId)).join('')}
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="drive-list">
+          <div class="list-header">
+            <span class="list-name-header">Name</span>
+            <span class="list-size-header">Size</span>
+            <span class="list-date-header">Modified</span>
+          </div>
+          ${folders.map(f => renderListItem(f, 'folder', courseId)).join('')}
+          ${resources.map(r => renderListItem(r, 'file', courseId)).join('')}
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Load folder contents error:', error);
+    container.innerHTML = '<div class="drive-error">Failed to load contents</div>';
+  }
+}
+
+function renderFolderCard(folder, type, courseId) {
+  return `
+    <div class="drive-item" data-type="${type}" data-id="${folder.id}" ondblclick="openFolder(${courseId}, ${folder.id})" oncontextmenu="showContextMenu(event, '${type}', ${folder.id}, ${courseId})">
+      <div class="item-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="#5f6368"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+      </div>
+      <div class="item-name">${folder.name}</div>
+    </div>
+  `;
+}
+
+function renderFileCard(resource, type, courseId) {
+  const icon = getDriveFileIcon(resource.file_type || resource.resource_type);
+  return `
+    <div class="drive-item" data-type="${type}" data-id="${resource.id}" oncontextmenu="showContextMenu(event, '${type}', ${resource.id}, ${courseId})">
+      <div class="item-icon">${icon}</div>
+      <div class="item-name" title="${resource.title}">${resource.title}</div>
+      <div class="item-actions">
+        ${resource.resource_type === 'link' 
+          ? `<a href="${resource.file_path}" target="_blank" class="action-btn" title="Open link">🔗</a>`
+          : `<a href="${resource.file_path}" download class="action-btn" title="Download">⬇️</a>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+function renderListItem(item, type, courseId) {
+  if (type === 'folder') {
+    return `
+      <div class="list-row" data-type="${type}" data-id="${item.id}" ondblclick="openFolder(${courseId}, ${item.id})" oncontextmenu="showContextMenu(event, '${type}', ${item.id}, ${courseId})">
+        <div class="list-name">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#5f6368"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+          <span>${item.name}</span>
+        </div>
+        <div class="list-size">-</div>
+        <div class="list-date">${formatDate(item.created_at)}</div>
+      </div>
+    `;
+  }
+  
+  const icon = getDriveFileIcon(item.file_type || item.resource_type);
+  const size = item.file_size ? formatFileSize(item.file_size) : '-';
+  return `
+    <div class="list-row" data-type="${type}" data-id="${item.id}" oncontextmenu="showContextMenu(event, '${type}', ${item.id}, ${courseId})">
+      <div class="list-name">
+        ${icon}
+        <span>${item.title}</span>
+      </div>
+      <div class="list-size">${size}</div>
+      <div class="list-date">${formatDate(item.created_at)}</div>
+    </div>
+  `;
+}
+
+function getDriveFileIcon(fileType) {
+  if (!fileType) return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#5f6368"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>';
+  if (fileType.includes('pdf')) return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#ea4335"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>';
+  if (fileType.includes('image')) return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#34a853"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>';
+  if (fileType.includes('video')) return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#fbbc04"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>';
+  if (fileType.includes('doc') || fileType.includes('word')) return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#4285f4"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>';
+  if (fileType.includes('sheet') || fileType.includes('excel')) return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#0f9d58"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 14H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1zm0-4H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1zm0-4H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1z"/></svg>';
+  return '<svg width="40" height="40" viewBox="0 0 24 24" fill="#5f6368"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>';
+}
+
+function formatFileSize(bytes) {
+  if (!bytes) return '-';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '-';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function setResourcesView(mode, courseId) {
+  resourcesViewMode = mode;
+  const folderId = currentFolderStack[courseId]?.length > 0 
+    ? currentFolderStack[courseId][currentFolderStack[courseId].length - 1].id 
+    : null;
+  loadFolderContents(courseId, folderId);
+}
+
+async function openFolder(courseId, folderId) {
+  currentFolderStack[courseId] = currentFolderStack[courseId] || [];
+  
+  try {
+    const pathResponse = await fetch(`${API_URL}/course-details/folders/path?folderId=${folderId}`);
+    const path = await pathResponse.json();
+    currentFolderStack[courseId] = path;
+  } catch (e) {
+    currentFolderStack[courseId].push({ id: folderId });
+  }
+  
+  updateBreadcrumb(courseId);
+  await loadFolderTree(courseId);
+  await loadFolderContents(courseId, folderId);
+}
+
+async function navigateToFolder(courseId, folderId) {
+  if (folderId === null) {
+    currentFolderStack[courseId] = [];
+  } else {
+    await openFolder(courseId, folderId);
+    return;
+  }
+  updateBreadcrumb(courseId);
+  await loadFolderTree(courseId);
+  await loadFolderContents(courseId, null);
+}
+
+function updateBreadcrumb(courseId) {
+  const breadcrumb = document.getElementById(`breadcrumb-${courseId}`);
+  if (!breadcrumb) return;
+
+  const stack = currentFolderStack[courseId] || [];
+  let html = `<span class="breadcrumb-item" onclick="navigateToFolder('${courseId}', null)">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+    Resources
+  </span>`;
+
+  stack.forEach((item, index) => {
+    if (item.isCourse) return;
+    html += `<span class="breadcrumb-arrow">›</span>`;
+    html += `<span class="breadcrumb-item ${index === stack.length - 1 ? 'active' : ''}" 
+      onclick="navigateToIndex('${courseId}', ${index})">${item.name}</span>`;
+  });
+
+  breadcrumb.innerHTML = html;
+}
+
+window.navigateToIndex = function(courseId, index) {
+  const stack = currentFolderStack[courseId];
+  if (index < 0) {
+    currentFolderStack[courseId] = [];
+    loadFolderContents(courseId, null);
+  } else {
+    currentFolderStack[courseId] = stack.slice(0, index + 1);
+    const folderId = stack[index].id;
+    loadFolderContents(courseId, folderId);
+  }
+  updateBreadcrumb(courseId);
+  loadFolderTree(courseId);
+};
+
+function showContextMenu(event, type, id, courseId) {
+  event.preventDefault();
+  event.stopPropagation();
+  
+  document.querySelectorAll('.context-menu').forEach(m => m.remove());
+  
+  const menu = document.createElement('div');
+  menu.className = 'context-menu';
+  menu.style.left = event.clientX + 'px';
+  menu.style.top = event.clientY + 'px';
+  
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  
+  let items = [];
+  if (type === 'folder') {
+    items = [
+      { label: 'Open', icon: '📂', action: `openFolder(${courseId}, ${id})` },
+      ...(isAdmin ? [
+        { label: 'Rename', icon: '✏️', action: `promptRename('folder', ${id}, ${courseId})` },
+        { label: 'Move to...', icon: '📁', action: `showMoveModal('folder', ${id}, ${courseId})` },
+        { divider: true },
+        { label: 'Delete', icon: '🗑️', action: `confirmDelete('folder', ${id}, ${courseId})`, danger: true }
+      ] : [])
+    ];
+  } else {
+    const resource = { id, resource_type: document.querySelector(`[data-id="${id}"]`)?.dataset.type === 'file' ? 'file' : 'link' };
+    items = [
+      ...(isAdmin ? [
+        { label: 'Rename', icon: '✏️', action: `promptRename('resource', ${id}, ${courseId})` },
+        { label: 'Move to...', icon: '📁', action: `showMoveModal('resource', ${id}, ${courseId})` }
+      ] : []),
+      { divider: true },
+      { label: resource.resource_type === 'link' ? 'Open Link' : 'Download', icon: resource.resource_type === 'link' ? '🔗' : '⬇️', action: `downloadResource(${id})` },
+      ...(isAdmin ? [
+        { divider: true },
+        { label: 'Delete', icon: '🗑️', action: `confirmDelete('resource', ${id}, ${courseId})`, danger: true }
+      ] : [])
+    ];
+  }
+  
+  menu.innerHTML = items.map(item => {
+    if (item.divider) return '<div class="context-divider"></div>';
+    return `<div class="context-item ${item.danger ? 'danger' : ''}" onclick="${item.action}; this.closest('.context-menu').remove()">
+      <span>${item.icon}</span> ${item.label}
+    </div>`;
+  }).join('');
+  
+  document.body.appendChild(menu);
+  
+  document.addEventListener('click', () => menu.remove(), { once: true });
+}
+
+async function promptRename(type, id, courseId) {
+  const currentName = type === 'folder' 
+    ? (await fetch(`${API_URL}/course-details/folders/list?courseId=${courseId}`).then(r => r.json())).find(f => f.id === id)?.name
+    : document.querySelector(`[data-id="${id}"] .item-name`)?.textContent;
+  
+  const newName = prompt('Enter new name:', currentName);
+  if (!newName || newName === currentName) return;
+  
+  const endpoint = type === 'folder' ? `${API_URL}/course-details/folders/${id}` : `${API_URL}/course-details/resources/${id}`;
+  const field = type === 'folder' ? 'name' : 'title';
+  
+  try {
+    await fetch(endpoint, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+      body: JSON.stringify({ [field]: newName })
+    });
+    
+    const folderId = currentFolderStack[courseId]?.length > 0 
+      ? currentFolderStack[courseId][currentFolderStack[courseId].length - 1].id 
+      : null;
+    loadFolderContents(courseId, folderId);
+    loadFolderTree(courseId);
+    showToast(`${type === 'folder' ? 'Folder' : 'File'} renamed successfully`, 'success');
+  } catch (error) {
+    showToast('Failed to rename', 'error');
+  }
+}
+
+async function showMoveModal(type, id, courseId) {
+  const modal = document.createElement('div');
+  modal.className = 'modal active';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width: 400px; color: black;">
+      <h3>Move ${type === 'folder' ? 'Folder' : 'File'}</h3>
+      <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px;">Select destination folder:</label>
+        <select id="move-destination" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+          <option value="">Root (No Folder)</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Cancel</button>
+        <button class="btn btn-primary" onclick="executeMove('${type}', ${id}, ${courseId})">Move</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  
+  try {
+    const response = await fetch(`${API_URL}/course-details/folders/tree?courseId=${courseId}`);
+    const folders = await response.json();
+    const select = document.getElementById('move-destination');
+    
+    const addFolders = (items, prefix = '') => {
+      items.forEach(f => {
+        if (f.id != id) {
+          const option = document.createElement('option');
+          option.value = f.id;
+          option.textContent = prefix + f.name;
+          select.appendChild(option);
+        }
+        if (f.children) addFolders(f.children, prefix + '— ');
+      });
+    };
+    addFolders(folders);
+  } catch (error) {
+    console.error('Load folders for move error:', error);
+  }
+}
+
+async function executeMove(type, id, courseId) {
+  const select = document.getElementById('move-destination');
+  const newParentId = select.value || null;
+  
+  const endpoint = type === 'folder' 
+    ? `${API_URL}/course-details/folders/${id}/move` 
+    : `${API_URL}/course-details/resources/${id}/move`;
+  
+  try {
+    await fetch(endpoint, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+      body: JSON.stringify({ parentId: newParentId, folderId: newParentId })
+    });
+    
+    document.querySelector('.modal.active')?.remove();
+    
+    const folderId = currentFolderStack[courseId]?.length > 0 
+      ? currentFolderStack[courseId][currentFolderStack[courseId].length - 1].id 
+      : null;
+    loadFolderContents(courseId, folderId);
+    loadFolderTree(courseId);
+    showToast(`${type === 'folder' ? 'Folder' : 'File'} moved successfully`, 'success');
+  } catch (error) {
+    showToast('Failed to move', 'error');
+  }
+}
+
+async function confirmDelete(type, id, courseId) {
+  if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
+  
+  const endpoint = type === 'folder' 
+    ? `${API_URL}/course-details/folders/${id}` 
+    : `${API_URL}/course-details/resources/${id}`;
+  
+  try {
+    await fetch(endpoint, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    
+    const folderId = currentFolderStack[courseId]?.length > 0 
+      ? currentFolderStack[courseId][currentFolderStack[courseId].length - 1].id 
+      : null;
+    loadFolderContents(courseId, folderId);
+    loadFolderTree(courseId);
+    showToast(`${type === 'folder' ? 'Folder' : 'File'} deleted successfully`, 'success');
+  } catch (error) {
+    showToast('Failed to delete', 'error');
+  }
+}
+
+function searchResources(courseId) {
+  const query = document.getElementById(`resource-search-${courseId}`)?.value.toLowerCase() || '';
+  const items = document.querySelectorAll(`#drive-content-${courseId} .drive-item`);
+  
+  items.forEach(item => {
+    const name = item.querySelector('.item-name')?.textContent.toLowerCase() || '';
+    item.style.display = name.includes(query) ? '' : 'none';
+  });
+}
+
+window.loadResourcesTab = loadResourcesTab;
+window.openFolder = openFolder;
+window.navigateToFolder = navigateToFolder;
+window.navigateToIndex = navigateToIndex;
+window.setResourcesView = setResourcesView;
+window.showContextMenu = showContextMenu;
+window.promptRename = promptRename;
+window.showMoveModal = showMoveModal;
+window.executeMove = executeMove;
+window.confirmDelete = confirmDelete;
+window.searchResources = searchResources;

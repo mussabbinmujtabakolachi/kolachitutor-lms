@@ -99,3 +99,62 @@ if (!fs.existsSync(uploadsDir)){
 - [x] Download works
 - [x] Delete works for admin
 - [x] Dashboard has navigation cards
+
+---
+
+## Google Drive-Style Resources Feature (v2)
+
+### Backend APIs Added
+
+**File:** `src/controllers/courseDetailController.ts`
+- `getFolderContents` - Get folders & files in a specific folder
+- `renameFolder` - Rename a folder
+- `moveFolder` - Move folder to different parent (with cycle detection)
+- `getFolderPath` - Get breadcrumb path for navigation
+- `getAllFoldersTree` - Get full folder tree for sidebar
+- `moveResource` - Move resource to different folder
+- `renameResource` - Rename a resource
+
+**File:** `src/routes/courseDetails.ts`
+- `GET /folders/contents` - Get folder contents
+- `GET /folders/tree` - Get folder tree for sidebar
+- `GET /folders/path` - Get breadcrumb path
+- `PUT /folders/:id` - Rename folder
+- `PUT /folders/:id/move` - Move folder
+- `PUT /resources/:id` - Rename resource
+- `PUT /resources/:id/move` - Move resource
+
+### Frontend Features
+
+**File:** `public/js/app.js`
+- `loadResourcesTab()` - Main Google Drive UI component
+- `loadFolderTree()` - Sidebar folder navigation
+- `loadFolderContents()` - Grid/List view rendering
+- `openFolder()` / `navigateToFolder()` - Folder navigation
+- `updateBreadcrumb()` - Breadcrumb navigation
+- `setResourcesView()` - Grid/List toggle
+- `showContextMenu()` - Right-click context menu
+- `promptRename()` - Rename dialog
+- `showMoveModal()` - Move dialog
+- `executeMove()` - Execute move operation
+- `confirmDelete()` - Delete confirmation
+- `searchResources()` - Search within folder
+- Drag & drop upload handlers
+
+**File:** `public/css/style.css`
+- Google Drive-style layout (sidebar + main area)
+- Grid and list view styles
+- Context menu styles
+- Drag & drop overlay styles
+
+### Features Implemented
+- [x] Nested folder support (parent_folder_id)
+- [x] Sidebar folder tree navigation
+- [x] Grid/List view toggle
+- [x] Breadcrumb navigation
+- [x] Right-click context menu (Rename, Move, Delete)
+- [x] Drag & drop file upload
+- [x] Search within folder
+- [x] File type icons
+- [x] File size formatting
+- [x] Responsive design
