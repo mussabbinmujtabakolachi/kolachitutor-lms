@@ -194,14 +194,19 @@ async function loadSubjectsForChat() {
 
 async function login(email, password) {
   try {
+    console.log('Attempting login for:', email);
+    console.log('API_URL:', API_URL);
     const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
 
+    console.log('Login response status:', response.status);
+    const data = await response.json();
+    console.log('Login response data:', data);
+
     if (response.ok) {
-      const data = await response.json();
       localStorage.setItem('token', data.token);
       currentUser = data.user;
       updateUIForLoggedInUser();
@@ -214,10 +219,10 @@ async function login(email, password) {
         }
       }, 100);
     } else {
-      const data = await response.json();
       showToast(data.error || 'Login failed', 'error');
     }
   } catch (error) {
+    console.error('Login error:', error);
     showToast('Login failed: ' + error.message, 'error');
   }
 }
