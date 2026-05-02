@@ -92,26 +92,18 @@ async function fetchProfile() {
 }
 
 function updateUIForLoggedInUser() {
-  const authButtons = document.querySelector('.auth-buttons');
-  if (!authButtons) return;
+  const authButtons = document.getElementById('nav-auth');
+  const userDropdown = document.getElementById('nav-user');
+  if (!authButtons || !userDropdown) return;
 
   if (currentUser && currentUser.fullName) {
-    authButtons.innerHTML = `
-      <div class="dropdown">
-        <button class="btn btn-secondary" onclick="toggleDropdown()">
-          <div class="avatar">${currentUser.fullName.charAt(0)}</div>
-          ${currentUser.fullName}
-        </button>
-        <div class="dropdown-menu" id="userDropdown">
-          <a class="dropdown-item" href="#dashboard">Dashboard</a>
-          <a class="dropdown-item" href="#courses">My Courses</a>
-          <a class="dropdown-item" href="#questions">Questions</a>
-          <a class="dropdown-item" href="#classes">Online Classes</a>
-          ${currentUser.role === 'admin' ? '<a class="dropdown-item" href="#admin">Admin Panel</a>' : ''}
-          <a class="dropdown-item" onclick="logout()">Logout</a>
-        </div>
-      </div>
-    `;
+    authButtons.style.display = 'none';
+    userDropdown.style.display = 'block';
+    
+    const userNameEl = document.getElementById('nav-user-name');
+    if (userNameEl) {
+      userNameEl.textContent = currentUser.fullName;
+    }
     
     // Show/hide admin nav card
     const adminNav = document.getElementById('admin-nav');
@@ -124,6 +116,26 @@ function updateUIForLoggedInUser() {
     const mobileNavClasses = document.getElementById('mobile-nav-classes');
     if (navClasses) navClasses.style.display = 'block';
     if (mobileNavClasses) mobileNavClasses.style.display = 'block';
+    
+    // Show dashboard in mobile nav
+    const mobileNavDash = document.getElementById('mobile-nav-dash');
+    if (mobileNavDash) mobileNavDash.style.display = 'block';
+    
+    // Hide login in mobile nav
+    const mobileNavLogin = document.getElementById('mobile-nav-login');
+    if (mobileNavLogin) mobileNavLogin.style.display = 'none';
+    
+    // Show quick access classes
+    const quickClasses = document.getElementById('quick-classes');
+    if (quickClasses) quickClasses.style.display = 'block';
+    
+    // Show dashboard classes link
+    const dashClasses = document.getElementById('dash-classes');
+    if (dashClasses) dashClasses.style.display = 'block';
+    
+    // Show my subjects section
+    const mySubjectsSection = document.getElementById('my-subjects-section');
+    if (mySubjectsSection && currentUser.role === 'student') mySubjectsSection.style.display = 'block';
     
     // Show course tabs and create button
     const courseTabs = document.getElementById('courses-tabs');
@@ -166,6 +178,17 @@ function showPage(pageId) {
 
   window.scrollTo(0, 0);
 
+  // Update active nav link
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+  const activeNav = document.querySelector(`.nav-link[href="#${pageId}"]`);
+  if (activeNav) activeNav.classList.add('active');
+
+  // Set dashboard user name
+  if (pageId === 'dashboard' && currentUser) {
+    const userNameEl = document.getElementById('user-name');
+    if (userNameEl) userNameEl.textContent = currentUser.fullName || currentUser.email;
+  }
+
   if (pageId === 'courses') {
     loadCoursesForStudent();
   }
@@ -176,6 +199,23 @@ function showPage(pageId) {
 
   if (pageId === 'classes') {
     loadClasses();
+  }
+
+  if (pageId === 'admin' && currentUser && currentUser.role === 'admin') {
+    loadTeacherAssignments();
+  }
+
+  if (pageId === 'dashboard' && currentUser) {
+    setTimeout(() => {
+      loadStats();
+      if (currentUser.role === 'admin') {
+        loadAdminDashboard();
+      } else if (currentUser.role === 'teacher') {
+        loadTeacherDashboard();
+      } else {
+        loadStudentDashboard();
+      }
+    }, 100);
   }
 }
 
@@ -283,19 +323,36 @@ function logout() {
   showToast('Logged out successfully', 'success');
   showPage('home');
   
-  const authButtons = document.querySelector('.auth-buttons');
-  if (authButtons) {
-    authButtons.innerHTML = `
-      <a href="#login" class="btn btn-secondary">Login</a>
-      <a href="#student-register" class="btn btn-primary">Sign Up</a>
-    `;
-  }
+  const authButtons = document.getElementById('nav-auth');
+  const userDropdown = document.getElementById('nav-user');
+  if (authButtons) authButtons.style.display = 'flex';
+  if (userDropdown) userDropdown.style.display = 'none';
   
   // Hide Classes nav link
   const navClasses = document.getElementById('nav-classes');
   const mobileNavClasses = document.getElementById('mobile-nav-classes');
   if (navClasses) navClasses.style.display = 'none';
   if (mobileNavClasses) mobileNavClasses.style.display = 'none';
+  
+  // Hide dashboard in mobile nav
+  const mobileNavDash = document.getElementById('mobile-nav-dash');
+  if (mobileNavDash) mobileNavDash.style.display = 'none';
+  
+  // Show login in mobile nav
+  const mobileNavLogin = document.getElementById('mobile-nav-login');
+  if (mobileNavLogin) mobileNavLogin.style.display = 'block';
+  
+  // Hide quick access classes
+  const quickClasses = document.getElementById('quick-classes');
+  if (quickClasses) quickClasses.style.display = 'none';
+  
+  // Hide dashboard classes link
+  const dashClasses = document.getElementById('dash-classes');
+  if (dashClasses) dashClasses.style.display = 'none';
+  
+  // Hide my subjects section
+  const mySubjectsSection = document.getElementById('my-subjects-section');
+  if (mySubjectsSection) mySubjectsSection.style.display = 'none';
   
   // Hide course tabs and create button
   const courseTabs = document.getElementById('courses-tabs');
@@ -702,12 +759,16 @@ async function loadStudentDashboard() {
     const subjects = await subjectsRes.json();
 
     const subjectList = document.getElementById('my-subjects');
-    if (subjectList) {
+    const mySubjectsSection = document.getElementById('my-subjects-section');
+    if (subjectList && subjects && subjects.length > 0) {
+      if (mySubjectsSection) mySubjectsSection.style.display = 'block';
       subjectList.innerHTML = subjects.map(s => `
-        <div class="card-3d">
-          <div class="feature-icon">${s.icon}</div>
-          <h3>${s.name}</h3>
-          <p>Teacher: ${s.teacher_name || 'Not assigned yet'}</p>
+        <div class="subject-card">
+          <div class="subject-icon">${s.icon}</div>
+          <div>
+            <h3 style="font-size: 0.95rem;">${s.name}</h3>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Teacher: ${s.teacher_name || 'Not assigned yet'}</p>
+          </div>
         </div>
       `).join('');
     }
@@ -737,19 +798,18 @@ async function loadTeacherDashboard() {
 function displayCourses(courses) {
   console.log('Displaying courses:', courses);
   const courseGrid = document.getElementById('courses-grid');
-  if (!courseGrid) {
-    console.log('Course grid not found!');
-    return;
-  }
+  const allCoursesGrid = document.getElementById('all-courses-grid');
 
   if (!courses || courses.length === 0) {
-    courseGrid.innerHTML = '<p style="text-align: center; padding: 20px;">No courses available yet.</p>';
+    const emptyHTML = '<p style="text-align: center; padding: 20px; color: var(--text-secondary);">No courses available yet.</p>';
+    if (courseGrid) courseGrid.innerHTML = emptyHTML;
+    if (allCoursesGrid) allCoursesGrid.innerHTML = emptyHTML;
     return;
   }
 
   const isAdmin = currentUser && currentUser.role === 'admin';
 
-  courseGrid.innerHTML = courses.map(c => `
+  const coursesHTML = courses.map(c => `
     <div class="course-card">
       <div class="course-thumbnail">${c.subject_icon || '📚'}</div>
       <div class="course-content">
@@ -764,6 +824,9 @@ function displayCourses(courses) {
       </div>
     </div>
   `).join('');
+
+  if (courseGrid) courseGrid.innerHTML = coursesHTML;
+  if (allCoursesGrid) allCoursesGrid.innerHTML = coursesHTML;
 }
 
 async function deleteCourse(courseId) {
@@ -1449,6 +1512,64 @@ function showUploadResourceModal(courseId = null) {
 
 function closeUploadResourceModal() {
   document.getElementById('uploadResourceModal').classList.remove('active');
+}
+
+function showAddLessonModal(courseId) {
+  const modal = document.createElement('div');
+  modal.className = 'modal active';
+  modal.id = 'addLessonModal';
+  modal.innerHTML = `
+    <div class="modal-content" style="color: black;">
+      <h3 style="text-align: center; margin-bottom: 20px;">Add Lesson</h3>
+      <form onsubmit="createNewLesson(event, ${courseId})">
+        <div class="form-group">
+          <label>Lesson Title *</label>
+          <input type="text" id="lessonTitle" placeholder="e.g., Introduction to Chapter 1" required>
+        </div>
+        <div class="form-group">
+          <label>Content / Description</label>
+          <textarea id="lessonContent" rows="4" placeholder="Lesson content..."></textarea>
+        </div>
+        <button type="submit" class="btn-auth-primary">Add Lesson</button>
+        <button type="button" class="btn-auth-secondary" onclick="this.closest('.modal').remove()">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+async function createNewLesson(e, courseId) {
+  e.preventDefault();
+  
+  const title = document.getElementById('lessonTitle')?.value;
+  const content = document.getElementById('lessonContent')?.value;
+
+  if (!title) {
+    showToast('Please enter a lesson title', 'error');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/course-details/lessons`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ title, content, courseId })
+    });
+
+    if (response.ok) {
+      showToast('Lesson added successfully!', 'success');
+      document.getElementById('addLessonModal')?.remove();
+      showCourseDetail(courseId);
+    } else {
+      showToast('Failed to add lesson', 'error');
+    }
+  } catch (error) {
+    console.error('Create lesson error:', error);
+    showToast('Failed to add lesson', 'error');
+  }
 }
 
 async function loadCoursesForResource(preselectedId = null) {
