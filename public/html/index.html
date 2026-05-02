@@ -6,828 +6,591 @@
   <title>Kolachi Tutors - Learning Management System</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+  <div id="particles"></div>
 
-  <!-- Moodle-style Top Navbar -->
-  <header class="moodle-navbar">
-    <div class="navbar-container">
-      <div class="navbar-brand">
-        <a href="#home" class="navbar-logo" onclick="showPage('home')">
-          <img src="images/logo.png" alt="Logo" class="navbar-logo-img">
-          <span class="navbar-site-name">Kolachi Tutors LMS</span>
-        </a>
+  <!-- Header -->
+  <header class="header">
+    <a href="#home" class="logo" onclick="showPage('home')">
+      <img src="images/logo.png" alt="Kolachi Tutors Logo" style="height: 40px; vertical-align: middle; margin-right: 5px;"> Kolachi<span>Tutors</span>
+    </a>
+    
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#home" onclick="showPage('home')">Home</a></li>
+        <li><a href="#courses" onclick="showPage('courses')">Courses</a></li>
+        <li><a href="#questions" onclick="showPage('questions')">AI Questions</a></li>
+        <li id="nav-classes" style="display:none;"><a href="#classes" onclick="showPage('classes')">Classes</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="user-menu">
+      <div class="auth-buttons">
+        <a href="#login" class="btn btn-secondary">Login</a>
+        <a href="#student-register" class="btn btn-primary">Sign Up</a>
       </div>
-
-      <nav class="navbar-nav" id="main-nav">
-        <a href="#home" class="nav-link" onclick="showPage('home')"><i class="fas fa-home"></i> Home</a>
-        <a href="#courses" class="nav-link" onclick="showPage('courses')"><i class="fas fa-book"></i> Courses</a>
-        <a href="#questions" class="nav-link" onclick="showPage('questions')"><i class="fas fa-robot"></i> AI Questions</a>
-        <a href="#classes" class="nav-link" id="nav-classes" style="display:none;" onclick="showPage('classes')"><i class="fas fa-chalkboard-teacher"></i> Classes</a>
-        <a href="#about" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
-      </nav>
-
-      <div class="navbar-user">
-        <div class="auth-buttons" id="navbar-auth">
-          <a href="#login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
-          <a href="#student-register" class="btn-signup">Sign Up</a>
-        </div>
-        <div class="user-dropdown" id="navbar-user-menu" style="display:none;">
-          <button class="user-toggle" id="user-toggle-btn">
-            <span class="user-avatar" id="user-avatar">U</span>
-            <span class="user-name" id="user-display-name">User</span>
-            <i class="fas fa-chevron-down"></i>
-          </button>
-          <div class="dropdown-menu" id="user-dropdown-menu">
-            <a href="#dashboard" class="dropdown-item" onclick="showPage('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#classes" class="dropdown-item" onclick="showPage('classes')"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item" id="admin-dropdown-link" style="display:none;" onclick="showPage('admin')"><i class="fas fa-cog"></i> Admin Panel</a>
-            <a href="#" class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          </div>
-        </div>
-        <button class="navbar-toggler" id="navbar-toggler">
-          <span class="toggler-icon"></span>
-          <span class="toggler-icon"></span>
-          <span class="toggler-icon"></span>
-        </button>
-      </div>
+      <button class="mobile-menu-btn">☰</button>
     </div>
   </header>
 
-  <!-- Mobile Navigation -->
-  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
-  <nav class="mobile-nav" id="mobile-nav">
-    <div class="mobile-nav-header">
-      <span>Navigation</span>
-      <button class="mobile-nav-close" id="mobile-nav-close"><i class="fas fa-times"></i></button>
-    </div>
-    <a href="#home" onclick="showPage('home'); closeMobileNav()"><i class="fas fa-home"></i> Home</a>
-    <a href="#courses" onclick="showPage('courses'); closeMobileNav()"><i class="fas fa-book"></i> Courses</a>
-    <a href="#questions" onclick="showPage('questions'); closeMobileNav()"><i class="fas fa-robot"></i> AI Questions</a>
-    <a href="#classes" onclick="showPage('classes'); closeMobileNav()" id="mobile-nav-classes" style="display:none;"><i class="fas fa-chalkboard-teacher"></i> Classes</a>
-    <a href="#about" onclick="closeMobileNav()"><i class="fas fa-info-circle"></i> About</a>
-    <div class="mobile-nav-divider"></div>
-    <a href="#login" onclick="showPage('login'); closeMobileNav()" id="mobile-login"><i class="fas fa-sign-in-alt"></i> Login</a>
-    <a href="#student-register" onclick="showPage('student-register'); closeMobileNav()" id="mobile-signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+  <!-- Mobile Nav -->
+  <nav class="mobile-nav">
+    <a href="#home" onclick="showPage('home')">Home</a>
+    <a href="#courses" onclick="showPage('courses')">Courses</a>
+    <a href="#questions" onclick="showPage('questions')">AI Questions</a>
+    <a href="#classes" onclick="showPage('classes')" id="mobile-nav-classes" style="display:none;">Classes</a>
+    <a href="#about">About</a>
+    <a href="#login" onclick="showPage('login')">Login</a>
   </nav>
 
-  <!-- Main Content Wrapper -->
-  <main class="main-wrapper">
-
-    <!-- Home Page -->
-    <div id="home" class="page active">
-      <section class="hero-section">
-        <div class="hero-container">
-          <div class="hero-content">
-            <h1>Welcome to <span>Kolachi Tutors</span> Learning Management System</h1>
-            <p>Experience the future of learning with AI-powered education. Join thousands of students achieving their academic goals with personalized guidance from expert teachers.</p>
-            <div class="hero-buttons">
-              <a href="#student-register" class="btn-hero-primary">Get Started</a>
-              <a href="#teacher-register" class="btn-hero-secondary">Become a Teacher</a>
-            </div>
-          </div>
+  <!-- Home Page -->
+  <div id="home" class="page active">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to Kolachi Tutors</h1>
+        <p>Experience the future of learning with AI-powered education. Join thousands of students achieving their academic goals with personalized guidance from expert teachers.</p>
+        <div class="hero-buttons">
+          <a href="#student-register" class="btn-3d">Get Started</a>
+          <a href="#teacher-register" class="btn btn-secondary">Become a Teacher</a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="content-section features-section">
-        <div class="container">
-          <h2 class="section-heading">Why Choose <span>Kolachi Tutors</span>?</h2>
-          <div class="features-grid">
-            <div class="feature-card">
-              <div class="feature-icon-wrapper"><i class="fas fa-graduation-cap"></i></div>
-              <h3>Expert Teachers</h3>
-              <p>Learn from qualified teachers assigned to help you excel in your chosen subjects.</p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon-wrapper"><i class="fas fa-robot"></i></div>
-              <h3>AI-Powered Learning</h3>
-              <p>Get instant answers to your questions with our advanced AI question-answering system.</p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon-wrapper"><i class="fas fa-download"></i></div>
-              <h3>Course Downloads</h3>
-              <p>Access and download course materials anytime, anywhere for offline learning.</p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon-wrapper"><i class="fas fa-chart-line"></i></div>
-              <h3>Progress Tracking</h3>
-              <p>Monitor your learning progress with detailed dashboards and performance metrics.</p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon-wrapper"><i class="fas fa-bullseye"></i></div>
-              <h3>Subject Selection</h3>
-              <p>Choose from a wide range of subjects and customize your learning path.</p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon-wrapper"><i class="fas fa-headset"></i></div>
-              <h3>24/7 Support</h3>
-              <p>Get help anytime with our AI assistant available around the clock.</p>
-            </div>
-          </div>
+    <section class="features">
+      <h2 class="section-title">Why Choose <span>Kolachi Tutors</span>?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎓</div>
+          <h3>Expert Teachers</h3>
+          <p>Learn from qualified teachers assigned to help you excel in your chosen subjects.</p>
         </div>
-      </section>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI-Powered Learning</h3>
+          <p>Get instant answers to your questions with our advanced AI question-answering system.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📥</div>
+          <h3>Course Downloads</h3>
+          <p>Access and download course materials anytime, anywhere for offline learning.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Progress Tracking</h3>
+          <p>Monitor your learning progress with detailed dashboards and performance metrics.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Subject Selection</h3>
+          <p>Choose from a wide range of subjects and customize your learning path.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>24/7 Support</h3>
+          <p>Get help anytime with our AI assistant available around the clock.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Login Page -->
+  <div id="login" class="page">
+    <div class="form-container">
+      <div class="form-card">
+        <h2>Welcome <span>Back</span></h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="login-email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" required placeholder="Enter your password">
+          </div>
+          <button type="submit" class="btn-3d" style="width: 100%;">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+          Don't have an account? <a href="#student-register" style="color: var(--accent-orange);">Sign Up</a>
+        </p>
+      </div>
     </div>
+  </div>
 
-    <!-- Login Page -->
-    <div id="login" class="page">
-      <div class="auth-page">
-        <div class="auth-container">
-          <div class="auth-logo-wrapper">
-            <img src="images/logo.png" alt="Kolachi Tutors Logo" class="auth-logo">
-            <h2>Kolachi Tutors LMS</h2>
+  <!-- Student Registration -->
+  <div id="student-register" class="page">
+    <div class="form-container">
+      <div class="form-card">
+        <h2>Student <span>Registration</span></h2>
+        <form id="student-register-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="student-name" required placeholder="Enter your full name">
           </div>
-          <div class="auth-card">
-            <div class="auth-card-header">
-              <h3>Login to your account</h3>
-              <p>Enter your credentials to access your courses</p>
-            </div>
-            <form id="login-form" class="auth-form">
-              <div class="form-group">
-                <label for="login-email"><i class="fas fa-envelope"></i> Email Address</label>
-                <input type="email" id="login-email" required placeholder="Enter your email">
-              </div>
-              <div class="form-group">
-                <label for="login-password"><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="login-password" required placeholder="Enter your password">
-              </div>
-              <button type="submit" class="btn-auth-primary">Login</button>
-            </form>
-            <div class="auth-footer">
-              <a href="#" class="forgot-password">Lost password?</a>
-              <div class="auth-divider">
-                <span>or</span>
-              </div>
-              <p>Don't have an account? <a href="#student-register">Create new account</a></p>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="student-email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="student-phone" placeholder="Enter your phone number">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="student-password" required placeholder="Create a password">
+          </div>
+          <div class="form-group">
+            <label>Select Your Subjects</label>
+            <div class="subject-select" id="subject-select">
+              <!-- Subjects will be loaded dynamically -->
             </div>
           </div>
+          <button type="submit" class="btn-3d" style="width: 100%;">Create Account</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+          Already have an account? <a href="#login" style="color: var(--accent-orange);">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Registration -->
+  <div id="teacher-register" class="page">
+    <div class="form-container">
+      <div class="form-card">
+        <h2>Teacher <span>Registration</span></h2>
+        <form id="teacher-register-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="teacher-name" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="teacher-email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="teacher-phone" placeholder="Enter your phone number">
+          </div>
+          <div class="form-group">
+            <label>Qualifications</label>
+            <textarea id="teacher-qualifications" placeholder="List your academic qualifications"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Bio / About You</label>
+            <textarea id="teacher-bio" placeholder="Tell students about yourself"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="teacher-password" required placeholder="Create a password">
+          </div>
+          <button type="submit" class="btn-3d" style="width: 100%;">Register as Teacher</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Classes Page -->
+  <div id="classes" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Online Classes</h2>
+        <button class="btn btn-primary" onclick="openCreateClassModal()">+ Create Class</button>
+      </div>
+
+      <div class="tabs" style="margin-top: 30px;">
+        <button class="tab active" onclick="switchClassesTab('upcoming', event)">Upcoming Classes</button>
+        <button class="tab" onclick="switchClassesTab('history', event)">Class History</button>
+      </div>
+
+      <div id="upcoming-classes-list" style="margin-top: 20px;">
+        <div style="text-align: center; padding: 40px;">
+          <div class="loader" style="margin: 0 auto;"></div>
+        </div>
+      </div>
+
+      <div id="class-history-list" style="margin-top: 20px; display: none;">
+        <div style="text-align: center; padding: 40px;">
+          <div class="loader" style="margin: 0 auto;"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Student Registration -->
-    <div id="student-register" class="page">
-      <div class="auth-page">
-        <div class="auth-container">
-          <div class="auth-logo-wrapper">
-            <img src="images/logo.png" alt="Kolachi Tutors Logo" class="auth-logo">
-            <h2>Student Registration</h2>
+  <!-- Create Class Modal -->
+  <div id="createClassModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; color: black;">
+      <h2 style="text-align: center; margin-bottom: 30px;">Create New Class</h2>
+      <form onsubmit="createNewClass(event)">
+        <div class="form-group">
+          <label>Class Title *</label>
+          <input type="text" id="classTitle" placeholder="e.g., Mathematics Class 101" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="classDescription" placeholder="What will be covered in this class?" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="classSubject">
+            <option value="">Select Subject</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date & Time *</label>
+          <input type="datetime-local" id="classDateTime" required value="">
+        </div>
+        <div class="form-group">
+          <label>Duration (minutes)</label>
+          <select id="classDuration">
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60" selected>60 minutes</option>
+            <option value="90">90 minutes</option>
+            <option value="120">120 minutes</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Class & Generate Meet Link</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeCreateClassModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Class Details Modal -->
+  <div id="classDetailModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; color: black;">
+      <div id="classDetails" style="text-align: left;"></div>
+      <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="closeClassModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Welcome, <span id="user-name">User</span>!</h2>
+      </div>
+
+      <div id="dashboard-stats">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="stat-students">0</div>
+            <div class="stat-label">Students</div>
           </div>
-          <div class="auth-card">
-            <div class="auth-card-header">
-              <h3>Create your student account</h3>
-              <p>Fill in your details to get started</p>
-            </div>
-            <form id="student-register-form" class="auth-form">
-              <div class="form-group">
-                <label for="student-name"><i class="fas fa-user"></i> Full Name</label>
-                <input type="text" id="student-name" required placeholder="Enter your full name">
-              </div>
-              <div class="form-group">
-                <label for="student-email"><i class="fas fa-envelope"></i> Email Address</label>
-                <input type="email" id="student-email" required placeholder="Enter your email">
-              </div>
-              <div class="form-group">
-                <label for="student-phone"><i class="fas fa-phone"></i> Phone Number</label>
-                <input type="tel" id="student-phone" placeholder="Enter your phone number">
-              </div>
-              <div class="form-group">
-                <label for="student-password"><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="student-password" required placeholder="Create a password">
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-book"></i> Select Your Subjects</label>
-                <div class="subject-select" id="subject-select"></div>
-              </div>
-              <button type="submit" class="btn-auth-primary">Create Account</button>
-            </form>
-            <div class="auth-footer">
-              <p>Already have an account? <a href="#login">Login here</a></p>
-            </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-teachers">0</div>
+            <div class="stat-label">Teachers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-courses">0</div>
+            <div class="stat-label">Courses</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-questions">0</div>
+            <div class="stat-label">Questions</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Teacher Registration -->
-    <div id="teacher-register" class="page">
-      <div class="auth-page">
-        <div class="auth-container">
-          <div class="auth-logo-wrapper">
-            <img src="images/logo.png" alt="Kolachi Tutors Logo" class="auth-logo">
-            <h2>Teacher Registration</h2>
+      <div class="dashboard-nav">
+        <div class="dashboard-nav-card" onclick="showPage('courses')">
+          <div class="nav-icon">📚</div>
+          <h3>Courses</h3>
+          <p>Browse & Download Courses</p>
+        </div>
+        <div class="dashboard-nav-card" onclick="showPage('questions')">
+          <div class="nav-icon">🤖</div>
+          <h3>AI Questions</h3>
+          <p>Ask Questions & Get Answers</p>
+        </div>
+        <div class="dashboard-nav-card" onclick="showPage('admin')" id="admin-nav" style="display:none;">
+          <div class="nav-icon">⚙️</div>
+          <h3>Admin Panel</h3>
+          <p>Manage Users & Assignments</p>
+        </div>
+      </div>
+
+      <div id="my-subjects" class="features-grid">
+        <!-- Subjects will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Page -->
+  <div id="courses" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Course <span>Library</span></h2>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary" onclick="showUploadModal()" id="upload-course-btn" style="display:none;">📤 Upload Course</button>
+          <button class="btn btn-primary" onclick="showCreateCourseModal()" id="create-course-btn" style="display:none;">+ New Course</button>
+        </div>
+      </div>
+
+      <div class="tabs" id="courses-tabs" style="display:none;">
+        <button class="tab active" onclick="switchCourseTab('all', event)">All Courses</button>
+        <button class="tab" onclick="switchCourseTab('details', event)">Detailed Courses</button>
+      </div>
+
+      <div id="all-courses-list" style="margin-top: 20px;">
+        <div class="courses-grid" id="courses-grid">
+          <!-- Courses will be loaded dynamically -->
+        </div>
+      </div>
+
+      <div id="detailed-courses-list" style="margin-top: 20px; display: none;">
+        <div class="courses-grid" id="detailed-courses-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Detail Page -->
+  <div id="course-detail" class="page">
+    <div class="dashboard" style="padding-top: 80px;">
+      <button class="btn btn-secondary" onclick="showPage('courses')" style="margin-bottom: 20px;">← Back to Courses</button>
+      
+      <div id="course-detail-content">
+        <!-- Course detail will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Course Modal -->
+  <div id="createCourseModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; color: black;">
+      <h2 style="text-align: center; margin-bottom: 30px;">Create New Course</h2>
+      <form onsubmit="createNewCourse(event)">
+        <div class="form-group">
+          <label>Course Title *</label>
+          <input type="text" id="newCourseTitle" placeholder="e.g., Mathematics 101" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="newCourseDescription" placeholder="Course description..." rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="newCourseSubject">
+            <option value="">Select Subject</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Course</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeCreateCourseModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create Folder Modal -->
+  <div id="createFolderModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; color: black;">
+      <h3 style="text-align: center; margin-bottom: 20px;">Create Folder</h3>
+      <form onsubmit="createNewFolder(event)">
+        <div class="form-group">
+          <label>Course</label>
+          <select id="folderCourseId" required>
+            <option value="">Select Course</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Folder Name *</label>
+          <input type="text" id="folderName" placeholder="e.g., Notes, Assignments" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Folder</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeCreateFolderModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Upload Resource Modal -->
+  <div id="uploadResourceModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; color: black;">
+      <h3 style="text-align: center; margin-bottom: 20px;">Upload Resource</h3>
+      <form onsubmit="uploadResourceFile(event)">
+        <div class="form-group">
+          <label>Course *</label>
+          <select id="resourceCourseId" required onchange="loadFoldersForResource()">
+            <option value="">Select Course</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Folder</label>
+          <select id="resourceFolderId">
+            <option value="">No Folder (Root)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Resource Title *</label>
+          <input type="text" id="resourceTitle" placeholder="Resource name" required>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="resourceTypeSelect">
+            <option value="file">File Upload</option>
+            <option value="link">External Link</option>
+          </select>
+        </div>
+        <div id="file-upload-section">
+          <div class="form-group">
+            <label>Select File *</label>
+            <input type="file" id="resourceFile" style="background: white; color: black;">
           </div>
-          <div class="auth-card">
-            <div class="auth-card-header">
-              <h3>Register as a Teacher</h3>
-              <p>Share your knowledge with students</p>
-            </div>
-            <form id="teacher-register-form" class="auth-form">
-              <div class="form-group">
-                <label for="teacher-name"><i class="fas fa-user"></i> Full Name</label>
-                <input type="text" id="teacher-name" required placeholder="Enter your full name">
-              </div>
-              <div class="form-group">
-                <label for="teacher-email"><i class="fas fa-envelope"></i> Email Address</label>
-                <input type="email" id="teacher-email" required placeholder="Enter your email">
-              </div>
-              <div class="form-group">
-                <label for="teacher-phone"><i class="fas fa-phone"></i> Phone Number</label>
-                <input type="tel" id="teacher-phone" placeholder="Enter your phone number">
-              </div>
-              <div class="form-group">
-                <label for="teacher-qualifications"><i class="fas fa-certificate"></i> Qualifications</label>
-                <textarea id="teacher-qualifications" placeholder="List your academic qualifications"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="teacher-bio"><i class="fas fa-info-circle"></i> Bio / About You</label>
-                <textarea id="teacher-bio" placeholder="Tell students about yourself"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="teacher-password"><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="teacher-password" required placeholder="Create a password">
-              </div>
-              <button type="submit" class="btn-auth-primary">Register as Teacher</button>
-            </form>
+        </div>
+        <div id="link-upload-section" style="display: none;">
+          <div class="form-group">
+            <label>Link URL *</label>
+            <input type="url" id="resourceLinkUrl" placeholder="https://...">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Upload Resource</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeUploadResourceModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Questions Page -->
+  <div id="questions" class="page">
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>🤖 AI Tutor</h2>
+      </div>
+      
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-message bot">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">
+            <p>Hello! I'm your AI tutor. Ask me anything about any subject - Math, Physics, Chemistry, Biology, Computer Science, English, and more!</p>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Dashboard Page -->
-    <div id="dashboard" class="page">
-      <div class="page-content">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <span class="breadcrumb-current">Dashboard</span>
-          </div>
-
-          <div class="dashboard-welcome">
-            <div class="welcome-banner">
-              <div class="welcome-text">
-                <h2>Welcome back, <span id="user-name">User</span>!</h2>
-                <p>Continue your learning journey. Check your courses and progress below.</p>
-              </div>
-              <div class="welcome-illustration">
-                <i class="fas fa-graduation-cap"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-stats">
-            <div class="stat-card">
-              <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
-              <div class="stat-info">
-                <div class="stat-number" id="stat-students">0</div>
-                <div class="stat-label">Students</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-              <div class="stat-info">
-                <div class="stat-number" id="stat-teachers">0</div>
-                <div class="stat-label">Teachers</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon"><i class="fas fa-book-open"></i></div>
-              <div class="stat-info">
-                <div class="stat-number" id="stat-courses">0</div>
-                <div class="stat-label">Courses</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon"><i class="fas fa-question-circle"></i></div>
-              <div class="stat-info">
-                <div class="stat-number" id="stat-questions">0</div>
-                <div class="stat-label">Questions Asked</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-section">
-            <div class="section-header">
-              <h2><i class="fas fa-book"></i> My Courses</h2>
-              <a href="#courses" class="view-all" onclick="showPage('courses')">View all <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="courses-grid" id="my-subjects"></div>
-          </div>
-
-          <div class="dashboard-section">
-            <div class="section-header">
-              <h2><i class="fas fa-th-large"></i> Quick Navigation</h2>
-            </div>
-            <div class="quick-nav-grid">
-              <a href="#courses" class="quick-nav-card" onclick="showPage('courses')">
-                <div class="quick-nav-icon"><i class="fas fa-book"></i></div>
-                <h3>Courses</h3>
-                <p>Browse & Download Courses</p>
-              </a>
-              <a href="#questions" class="quick-nav-card" onclick="showPage('questions')">
-                <div class="quick-nav-icon"><i class="fas fa-robot"></i></div>
-                <h3>AI Questions</h3>
-                <p>Ask Questions & Get Answers</p>
-              </a>
-              <a href="#classes" class="quick-nav-card" onclick="showPage('classes')">
-                <div class="quick-nav-icon"><i class="fas fa-video"></i></div>
-                <h3>Online Classes</h3>
-                <p>Join & Schedule Classes</p>
-              </a>
-              <a href="#admin" class="quick-nav-card" id="admin-nav" style="display:none;" onclick="showPage('admin')">
-                <div class="quick-nav-icon"><i class="fas fa-cog"></i></div>
-                <h3>Admin Panel</h3>
-                <p>Manage Users & Assignments</p>
-              </a>
-            </div>
-          </div>
-        </div>
+      
+      <div class="chat-input-container">
+        <select id="ai-chat-subject" class="chat-subject-select">
+          <option value="">All Subjects</option>
+        </select>
+        <input type="text" id="ai-chat-input" placeholder="Type your question here..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+        <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
       </div>
     </div>
+  </div>
 
-    <!-- Classes Page -->
-    <div id="classes" class="page">
-      <div class="page-content">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <span class="breadcrumb-current">Online Classes</span>
-          </div>
+  <!-- Admin Page -->
+  <div id="admin" class="page">
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <h2>Admin <span>Panel</span></h2>
+      </div>
 
-          <div class="content-card">
-            <div class="card-header">
-              <h2><i class="fas fa-chalkboard-teacher"></i> Online Classes</h2>
-              <button class="btn-primary" onclick="openCreateClassModal()"><i class="fas fa-plus"></i> Create Class</button>
-            </div>
-            <div class="card-body">
-              <div class="tabs">
-                <button class="tab active" onclick="switchClassesTab('upcoming', event)">Upcoming Classes</button>
-                <button class="tab" onclick="switchClassesTab('history', event)">Class History</button>
-              </div>
-              <div id="upcoming-classes-list" style="margin-top: 20px;">
-                <div style="text-align: center; padding: 40px;">
-                  <div class="loader" style="margin: 0 auto;"></div>
-                </div>
-              </div>
-              <div id="class-history-list" style="margin-top: 20px; display: none;">
-                <div style="text-align: center; padding: 40px;">
-                  <div class="loader" style="margin: 0 auto;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchAdminTab('assignments')">Teacher Assignments</button>
+        <button class="tab" onclick="switchAdminTab('users')">Manage Users</button>
+        <button class="tab" onclick="switchAdminTab('courses')">All Courses</button>
+      </div>
+
+      <div id="admin-content">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Assigned Teacher</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="assignments-body">
+            <!-- Assignments loaded dynamically -->
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <!-- Create Class Modal -->
-    <div id="createClassModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Create New Class</h3>
-            <button class="modal-close" onclick="closeCreateClassModal()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="modal-body">
-            <form onsubmit="createNewClass(event)">
-              <div class="form-group">
-                <label>Class Title *</label>
-                <input type="text" id="classTitle" placeholder="e.g., Mathematics Class 101" required>
-              </div>
-              <div class="form-group">
-                <label>Description</label>
-                <textarea id="classDescription" placeholder="What will be covered in this class?" rows="3"></textarea>
-              </div>
-              <div class="form-group">
-                <label>Subject</label>
-                <select id="classSubject">
-                  <option value="">Select Subject</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Date & Time *</label>
-                <input type="datetime-local" id="classDateTime" required value="">
-              </div>
-              <div class="form-group">
-                <label>Duration (minutes)</label>
-                <select id="classDuration">
-                  <option value="30">30 minutes</option>
-                  <option value="45">45 minutes</option>
-                  <option value="60" selected>60 minutes</option>
-                  <option value="90">90 minutes</option>
-                  <option value="120">120 minutes</option>
-                </select>
-              </div>
-              <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeCreateClassModal()">Cancel</button>
-                <button type="submit" class="btn-primary">Create Class & Generate Meet Link</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Class Details Modal -->
-    <div id="classDetailModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Class Details</h3>
-            <button class="modal-close" onclick="closeClassModal()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="modal-body">
-            <div id="classDetails"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn-secondary" style="width: 100%;" onclick="closeClassModal()">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Courses Page -->
-    <div id="courses" class="page">
-      <div class="page-content">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <span class="breadcrumb-current">Courses</span>
-          </div>
-
-          <div class="content-card">
-            <div class="card-header">
-              <h2><i class="fas fa-book-open"></i> Course Library</h2>
-              <div class="card-actions">
-                <button class="btn-secondary" onclick="showUploadModal()" id="upload-course-btn" style="display:none;"><i class="fas fa-upload"></i> Upload Course</button>
-                <button class="btn-primary" onclick="showCreateCourseModal()" id="create-course-btn" style="display:none;"><i class="fas fa-plus"></i> New Course</button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="tabs" id="courses-tabs" style="display:none;">
-                <button class="tab active" onclick="switchCourseTab('all', event)">All Courses</button>
-                <button class="tab" onclick="switchCourseTab('details', event)">Detailed Courses</button>
-              </div>
-              <div id="all-courses-list" style="margin-top: 20px;">
-                <div class="courses-grid" id="courses-grid"></div>
-              </div>
-              <div id="detailed-courses-list" style="margin-top: 20px; display: none;">
-                <div class="courses-grid" id="detailed-courses-grid"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Course Detail Page -->
-    <div id="course-detail" class="page">
-      <div class="page-content">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <a href="#courses" onclick="showPage('courses')">Courses</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <span class="breadcrumb-current">Course Detail</span>
-          </div>
-          <div class="content-card">
-            <div class="card-body">
-              <button class="btn-secondary" onclick="showPage('courses')" style="margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Back to Courses</button>
-              <div id="course-detail-content"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Create Course Modal -->
-    <div id="createCourseModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Create New Course</h3>
-            <button class="modal-close" onclick="closeCreateCourseModal()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="modal-body">
-            <form onsubmit="createNewCourse(event)">
-              <div class="form-group">
-                <label>Course Title *</label>
-                <input type="text" id="newCourseTitle" placeholder="e.g., Mathematics 101" required>
-              </div>
-              <div class="form-group">
-                <label>Description</label>
-                <textarea id="newCourseDescription" placeholder="Course description..." rows="3"></textarea>
-              </div>
-              <div class="form-group">
-                <label>Subject</label>
-                <select id="newCourseSubject">
-                  <option value="">Select Subject</option>
-                </select>
-              </div>
-              <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeCreateCourseModal()">Cancel</button>
-                <button type="submit" class="btn-primary">Create Course</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Create Folder Modal -->
-    <div id="createFolderModal" class="modal">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Create Folder</h3>
-            <button class="modal-close" onclick="closeCreateFolderModal()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="modal-body">
-            <form onsubmit="createNewFolder(event)">
-              <div class="form-group">
-                <label>Course</label>
-                <select id="folderCourseId" required>
-                  <option value="">Select Course</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Folder Name *</label>
-                <input type="text" id="folderName" placeholder="e.g., Notes, Assignments" required>
-              </div>
-              <input type="hidden" id="folderParentId" value="">
-              <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeCreateFolderModal()">Cancel</button>
-                <button type="submit" class="btn-primary">Create Folder</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Upload Resource Modal -->
-    <div id="uploadResourceModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Upload Resource</h3>
-            <button class="modal-close" onclick="closeUploadResourceModal()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="modal-body">
-            <form onsubmit="uploadResourceFile(event)">
-              <div class="form-group">
-                <label>Course *</label>
-                <select id="resourceCourseId" required onchange="loadFoldersForResource()">
-                  <option value="">Select Course</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Folder</label>
-                <select id="resourceFolderId">
-                  <option value="">No Folder (Root)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Resource Title *</label>
-                <input type="text" id="resourceTitle" placeholder="Resource name" required>
-              </div>
-              <div class="form-group">
-                <label>Type</label>
-                <select id="resourceTypeSelect">
-                  <option value="file">File Upload</option>
-                  <option value="link">External Link</option>
-                </select>
-              </div>
-              <div id="file-upload-section">
-                <div class="form-group">
-                  <label>Select File *</label>
-                  <input type="file" id="resourceFile" class="file-input">
-                </div>
-              </div>
-              <div id="link-upload-section" style="display: none;">
-                <div class="form-group">
-                  <label>Link URL *</label>
-                  <input type="url" id="resourceLinkUrl" placeholder="https://...">
-                </div>
-              </div>
-              <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeUploadResourceModal()">Cancel</button>
-                <button type="submit" class="btn-primary">Upload Resource</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Questions Page -->
-    <div id="questions" class="page">
-      <div class="page-content">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <span class="breadcrumb-current">AI Questions</span>
-          </div>
-
-          <div class="chat-container">
-            <div class="chat-header">
-              <h2><i class="fas fa-robot"></i> AI Tutor</h2>
-              <p>Ask me anything about any subject</p>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-              <div class="chat-message bot">
-                <div class="message-avatar"><i class="fas fa-robot"></i></div>
-                <div class="message-content">
-                  <p>Hello! I'm your AI tutor. Ask me anything about any subject - Math, Physics, Chemistry, Biology, Computer Science, English, and more!</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat-input-container">
-              <select id="ai-chat-subject" class="chat-subject-select">
-                <option value="">All Subjects</option>
-              </select>
-              <input type="text" id="ai-chat-input" placeholder="Type your question here..." onkeypress="if(event.key==='Enter')sendChatMessage()">
-              <button class="chat-send-btn" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Admin Page -->
-    <div id="admin" class="page">
-      <div class="page-content">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
-            <span class="breadcrumb-current">Admin Panel</span>
-          </div>
-
-          <div class="content-card">
-            <div class="card-header">
-              <h2><i class="fas fa-cog"></i> Admin Panel</h2>
-            </div>
-            <div class="card-body">
-              <div class="tabs">
-                <button class="tab active" onclick="switchAdminTab('assignments')">Teacher Assignments</button>
-                <button class="tab" onclick="switchAdminTab('users')">Manage Users</button>
-                <button class="tab" onclick="switchAdminTab('courses')">All Courses</button>
-              </div>
-              <div id="admin-content">
-                <table class="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Student Name</th>
-                      <th>Email</th>
-                      <th>Subject</th>
-                      <th>Assigned Teacher</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody id="assignments-body"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
+  </div>
 
   <!-- Footer -->
-  <footer class="moodle-footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-col">
-            <div class="footer-brand">
-              <img src="images/logo.png" alt="Logo" class="footer-logo">
-              <h4>Kolachi Tutors LMS</h4>
-            </div>
-            <p>Empowering students with AI-driven education for a brighter future. Learn, grow, and achieve your academic goals.</p>
-            <div class="footer-social">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Quick Links</h4>
-            <ul class="footer-links">
-              <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
-              <li><a href="#courses"><i class="fas fa-chevron-right"></i> Courses</a></li>
-              <li><a href="#questions"><i class="fas fa-chevron-right"></i> AI Questions</a></li>
-              <li><a href="#classes"><i class="fas fa-chevron-right"></i> Online Classes</a></li>
-              <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>Resources</h4>
-            <ul class="footer-links">
-              <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
-              <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
-              <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
-              <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>Contact Us</h4>
-            <ul class="footer-contact">
-              <li><i class="fas fa-map-marker-alt"></i> Karachi, Pakistan</li>
-              <li><i class="fas fa-envelope"></i> <a href="mailto:info@kolachi.edu.pk">info@kolachi.edu.pk</a></li>
-              <li><i class="fas fa-phone"></i> <a href="tel:+923001234567">+92 300 1234567</a></li>
-              <li><i class="fas fa-clock"></i> Mon - Fri: 9:00 AM - 6:00 PM</li>
-            </ul>
-          </div>
-        </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Kolachi Tutors</h4>
+        <p style="color: var(--text-secondary);">Empowering students with AI-driven education for a brighter future.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#questions">AI Questions</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@kolachi.edu.pk">info@kolachi.edu.pk</a></li>
+          <li><a href="tel:+923001234567">+92 300 1234567</a></li>
+        </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="container">
-        <p>&copy; 2026 Kolachi Tutors. All rights reserved. | Powered by Kolachi Tutors LMS</p>
-      </div>
+      <p>&copy; 2024 Kolachi Tutors. All rights reserved.</p>
     </div>
   </footer>
 
   <!-- Upload Modal -->
   <div class="modal" id="upload-modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Upload Resource</h3>
-          <button class="modal-close" onclick="closeUploadModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-content">
+      <h3>Upload Resource</h3>
+      <form id="upload-form">
+        <div class="form-group">
+          <label>Select Course *</label>
+          <select id="course-subject" required></select>
         </div>
-        <div class="modal-body">
-          <form id="upload-form">
-            <div class="form-group">
-              <label>Select Course *</label>
-              <select id="course-subject" required></select>
-            </div>
-            <div class="form-group">
-              <label>Resource Title</label>
-              <input type="text" id="course-title" placeholder="e.g., Chapter 1 Notes" required>
-            </div>
-            <div class="form-group">
-              <label>Course File</label>
-              <div class="upload-zone" id="upload-zone">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop files here or click to browse</p>
-                <input type="file" id="course-file" style="display: none;">
-              </div>
-            </div>
-            <div class="modal-actions">
-              <button type="button" class="btn-secondary" onclick="closeUploadModal()">Cancel</button>
-              <button type="submit" class="btn-primary">Upload</button>
-            </div>
-          </form>
+        <div class="form-group">
+          <label>Resource Title</label>
+          <input type="text" id="course-title" placeholder="e.g., Chapter 1 Notes" required>
         </div>
-      </div>
+        <div class="form-group">
+          <label>Course File</label>
+          <div class="upload-zone" id="upload-zone">
+            <p>Drag & drop files here or click to browse</p>
+            <input type="file" id="course-file" style="display: none;">
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn btn-primary">Upload</button>
+          <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <!-- Assign Teacher Modal -->
   <div class="modal" id="assign-modal">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Assign Teacher</h3>
-          <button class="modal-close" onclick="closeAssignModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-content">
+      <h3>Assign Teacher</h3>
+      <form id="assign-form">
+        <input type="hidden" id="assign-student-email">
+        <input type="hidden" id="assign-subject-id">
+        <div class="form-group">
+          <label>Select Teacher</label>
+          <select id="assign-teacher" required></select>
         </div>
-        <div class="modal-body">
-          <form id="assign-form">
-            <input type="hidden" id="assign-student-email">
-            <input type="hidden" id="assign-subject-id">
-            <div class="form-group">
-              <label>Select Teacher</label>
-              <select id="assign-teacher" required></select>
-            </div>
-            <div class="modal-actions">
-              <button type="button" class="btn-secondary" onclick="closeAssignModal()">Cancel</button>
-              <button type="submit" class="btn-primary">Assign</button>
-            </div>
-          </form>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn btn-primary">Assign</button>
+          <button type="button" class="btn btn-secondary" onclick="closeAssignModal()">Cancel</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 
   <script src="js/app.js"></script>
   <script>
+    // Page specific initialization
     document.addEventListener('DOMContentLoaded', async () => {
+      // Load subjects for registration
       loadSubjectsForRegistration();
       loadSubjectsForSelect();
       loadCourses();
       
+      // Login form handler
       document.getElementById('login-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = document.getElementById('login-email').value;
@@ -835,6 +598,7 @@
         login(email, password);
       });
 
+      // Student registration handler
       document.getElementById('student-register-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const selectedSubjects = Array.from(document.querySelectorAll('#subject-select input:checked')).map(cb => cb.value);
@@ -850,6 +614,7 @@
         registerStudent(formData);
       });
 
+      // Teacher registration handler
       document.getElementById('teacher-register-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = {
@@ -864,6 +629,7 @@
         registerTeacher(formData);
       });
 
+      // Upload form handler
       document.getElementById('upload-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -883,10 +649,12 @@
         closeUploadModal();
       });
 
+      // Upload zone click handler
       document.getElementById('upload-zone')?.addEventListener('click', () => {
         document.getElementById('course-file').click();
       });
 
+      // Drag and drop
       const uploadZone = document.getElementById('upload-zone');
       uploadZone?.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -902,6 +670,7 @@
         fileInput.files = e.dataTransfer.files;
       });
 
+      // File selection display
       document.getElementById('course-file')?.addEventListener('change', (e) => {
         if (e.target.files[0]) {
           document.getElementById('upload-zone').querySelector('p').textContent = 
@@ -909,12 +678,14 @@
         }
       });
 
+      // Assign form handler
       document.getElementById('assign-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const studentEmail = document.getElementById('assign-student-email').value;
         const subjectId = parseInt(document.getElementById('assign-subject-id').value);
         const teacherId = parseInt(document.getElementById('assign-teacher').value);
         
+        // Get student ID from email (simplified - in production, you'd have an API endpoint)
         const usersRes = await fetch(`${API_URL}/admin/users?role=student`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
@@ -926,33 +697,7 @@
           closeAssignModal();
         }
       });
-
-      document.getElementById('user-toggle-btn')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        document.getElementById('user-dropdown-menu').classList.toggle('active');
-      });
-
-      document.addEventListener('click', () => {
-        document.getElementById('user-dropdown-menu')?.classList.remove('active');
-      });
-
-      document.getElementById('user-dropdown-menu')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-
-      document.getElementById('navbar-toggler')?.addEventListener('click', () => {
-        document.getElementById('mobile-nav').classList.add('active');
-        document.getElementById('mobile-nav-overlay').classList.add('active');
-      });
-
-      document.getElementById('mobile-nav-close')?.addEventListener('click', closeMobileNav);
-      document.getElementById('mobile-nav-overlay')?.addEventListener('click', closeMobileNav);
     });
-
-    function closeMobileNav() {
-      document.getElementById('mobile-nav').classList.remove('active');
-      document.getElementById('mobile-nav-overlay').classList.remove('active');
-    }
 
     async function loadSubjectsForRegistration() {
       const subjects = await loadSubjects();
@@ -1080,6 +825,7 @@
       }
     }
 
+    // Close modals on outside click
     document.querySelectorAll('.modal').forEach(modal => {
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
