@@ -3,8 +3,16 @@ import { Pool } from 'pg';
 let poolConfig: any;
 
 if (process.env.DATABASE_URL) {
+  const dbUrl = process.env.DATABASE_URL;
+  console.log('Using DATABASE_URL (masked):', dbUrl.replace(/\/\/.*@/, '//***@'));
+  
+  // Validate URL format
+  if (!dbUrl.startsWith('postgres://') && !dbUrl.startsWith('postgresql://')) {
+    console.error('WARNING: DATABASE_URL does not start with postgres:// or postgresql://');
+  }
+  
   poolConfig = {
-    connectionString: process.env.DATABASE_URL,
+    connectionString: dbUrl,
     ssl: { rejectUnauthorized: false },
     max: 20,
     idleTimeoutMillis: 30000,
