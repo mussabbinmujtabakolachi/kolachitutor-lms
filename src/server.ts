@@ -38,6 +38,10 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/meets', meetRoutes);
 app.use('/api/course-details', courseDetailRoutes);
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/html/index.html'));
 });
