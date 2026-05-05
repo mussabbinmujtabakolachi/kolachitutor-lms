@@ -3,9 +3,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initDatabase = exports.pool = void 0;
 const pg_1 = require("pg");
 let poolConfig;
+const isRender = process.env.RENDER === 'true';
 if (process.env.DATABASE_URL) {
+    const dbUrl = process.env.DATABASE_URL;
+    console.log('Using DATABASE_URL (masked):', dbUrl.replace(/\/\/.*@/, '//***@'));
+    // Validate URL format
+    if (!dbUrl.startsWith('postgres://') && !dbUrl.startsWith('postgresql://')) {
+        console.error('ERROR: DATABASE_URL must start with postgres:// or postgresql://');
+        console.error('Current value (masked):', dbUrl.replace(/\/\/.*@/, '//***@'));
+    }
+    // Check for truncated render.com hostname
+    if (dbUrl.includes('render.com') === false && isRender) {
+        console.error('WARNING: DATABASE_URL may be missing .render.com in hostname!');
+        console.error('Hostname detected may be truncated. Check Render dashboard.');
+    }
     poolConfig = {
-        connectionString: process.env.DATABASE_URL,
+        connectionString: dbUrl,
         ssl: { rejectUnauthorized: false },
         max: 20,
         idleTimeoutMillis: 30000,
@@ -25,13 +38,15 @@ else {
     };
 }
 exports.pool = new pg_1.Pool(poolConfig);
-const initDatabase = async () => {
-    const client = await exports.pool.connect();
-    console.log('Database connection established');
-    try {
-        console.log('Creating tables...');
-        await client.query(`
-      CREATE TABLE IF NOT EXISTS users (
+const initDatabase = async (retries = 3) => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const client = await exports.pool.connect();
+            console.log('Database connection established (attempt ' + attempt + ')');
+            try {
+                console.log('Creating tables...');
+                await client.query(`
+          CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -155,9 +170,9 @@ const initDatabase = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-        console.log('Tables created');
-        console.log('Inserting subjects...');
-        await client.query(`
+                console.log('Tables created');
+                console.log('Inserting subjects...');
+                await client.query(`
       INSERT INTO subjects (name, description, icon) VALUES
         ('Mathematics', 'Advanced Mathematics courses', '📐'),
         ('Physics', 'Physics and Applied Physics', '⚛️'),
@@ -171,15 +186,19 @@ const initDatabase = async () => {
         ('Economics', 'Economics and Commerce', '📈')
       ON CONFLICT DO NOTHING;
     `);
-        console.log('Subjects inserted');
-        console.log('Database initialized successfully');
-    }
-    catch (error) {
-        console.error('Error initializing database:', error);
-        throw error;
-    }
-    finally {
-        client.release();
+                console.log('Subjects inserted');
+                console.log('Database initialized successfully');
+            }
+            catch (error) {
+                console.error('Error initializing database:', error);
+                throw error;
+            }
+            finally {
+                client.release();
+            }
+        }
+        finally { }
+        ;
     }
 };
 exports.initDatabase = initDatabase;

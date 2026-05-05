@@ -35,12 +35,35 @@ app.use('/api/questions', questions_1.default);
 app.use('/api/admin', admin_1.default);
 app.use('/api/meets', meets_1.default);
 app.use('/api/course-details', courseDetails_1.default);
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../public/html/index.html'));
 });
 const startServer = async () => {
     try {
         console.log('Connecting to database...');
+        console.log('NODE_ENV:', process.env.NODE_ENV);
+        console.log('RENDER:', process.env.RENDER);
+        if (process.env.DATABASE_URL) {
+            const maskedUrl = process.env.DATABASE_URL.replace(/\/\/.*@/, '//***@');
+            console.log('DATABASE_URL (masked):', maskedUrl);
+            // Check for truncated render.com hostname
+            if (process.env.DATABASE_URL.includes('render.com') === false && process.env.RENDER === 'true') {
+                console.error('='.repeat(60));
+                console.error('DATABASE_URL ERROR: Missing .render.com in hostname!');
+                console.error('The hostname appears to be truncated.');
+                console.error('Please go to Render dashboard:');
+                console.error('1. Click your PostgreSQL database');
+                console.error('2. Copy the FULL Internal Database URL');
+                console.error('3. Paste it into your Web Service > Environment > DATABASE_URL');
+                console.error('='.repeat(60));
+            }
+        }
+        else {
+            console.log('No DATABASE_URL found, using local config');
+        }
         await (0, database_1.initDatabase)();
         console.log('Database connected and initialized');
         const bcrypt = require('bcryptjs');
@@ -53,8 +76,11 @@ const startServer = async () => {
         console.log('Admin user ensured');
     }
     catch (error) {
-        console.error('Database initialization error:', error);
-        console.error('Error details:', JSON.stringify(error));
+        console.error('Database initialization error:', error.message);
+        if (error.message && error.message.includes('ENOTFOUND')) {
+            console.error('This is a DNS error - DATABASE_URL hostname is invalid or truncated!');
+            console.error('Please check your Render dashboard and update DATABASE_URL.');
+        }
     }
     app.listen(PORT, () => {
         console.log(`Kolachi Tutors LMS running on port ${PORT}`);

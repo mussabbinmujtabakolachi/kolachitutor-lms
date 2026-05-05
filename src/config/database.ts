@@ -2,13 +2,22 @@ import { Pool } from 'pg';
 
 let poolConfig: any;
 
+const isRender = process.env.RENDER === 'true';
+
 if (process.env.DATABASE_URL) {
   const dbUrl = process.env.DATABASE_URL;
   console.log('Using DATABASE_URL (masked):', dbUrl.replace(/\/\/.*@/, '//***@'));
   
   // Validate URL format
   if (!dbUrl.startsWith('postgres://') && !dbUrl.startsWith('postgresql://')) {
-    console.error('WARNING: DATABASE_URL does not start with postgres:// or postgresql://');
+    console.error('ERROR: DATABASE_URL must start with postgres:// or postgresql://');
+    console.error('Current value (masked):', dbUrl.replace(/\/\/.*@/, '//***@'));
+  }
+  
+  // Check for truncated render.com hostname
+  if (dbUrl.includes('render.com') === false && isRender) {
+    console.error('WARNING: DATABASE_URL may be missing .render.com in hostname!');
+    console.error('Hostname detected may be truncated. Check Render dashboard.');
   }
   
   poolConfig = {
@@ -33,13 +42,15 @@ if (process.env.DATABASE_URL) {
 
 export const pool = new Pool(poolConfig);
 
-export const initDatabase = async () => {
-  const client = await pool.connect();
-  console.log('Database connection established');
-  try {
-    console.log('Creating tables...');
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS users (
+export const initDatabase = async (retries = 3) => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const client = await pool.connect();
+      console.log('Database connection established (attempt ' + attempt + ')');
+      try {
+        console.log('Creating tables...');
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,

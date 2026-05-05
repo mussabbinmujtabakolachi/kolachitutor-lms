@@ -149,6 +149,29 @@ function updateUIForLoggedInUser() {
   adjustHomeHeroForAuth();
   // Also ensure the home hero CTAs state is consistent
   ensureHomeHeroCtaState();
+
+  // Dynamic Admin Panel link: show in dropdown if user is admin
+  try {
+    const dropdownMenu = document.getElementById('userDropdown');
+    if (dropdownMenu) {
+      // Remove existing admin link if present
+      const existing = dropdownMenu.querySelector('a.dropdown-item.admin-panel');
+      if (existing) existing.remove();
+      if (currentUser?.role === 'admin') {
+        const a = document.createElement('a');
+        a.href = '#admin';
+        a.className = 'dropdown-item admin-panel';
+        a.innerHTML = '<i class="fas fa-cog"></i> Admin Panel';
+        a.onclick = function(e) {
+          e.preventDefault(); showPage('admin'); toggleDropdown();
+        };
+        // Insert as the first item for visibility
+        dropdownMenu.insertBefore(a, dropdownMenu.firstChild);
+      }
+    }
+  } catch (e) {
+    console.error('Failed to render admin panel dropdown item:', e);
+  }
 }
 
 // Hide/Show Home CTAs based on login state (front-end only)
