@@ -145,6 +145,32 @@ function updateUIForLoggedInUser() {
     if (createCourseBtn) createCourseBtn.style.display = 'inline-flex';
     if (uploadCourseBtn) uploadCourseBtn.style.display = 'inline-flex';
   }
+  // Ensure home hero CTAs are hidden when logged in
+  adjustHomeHeroForAuth();
+  // Also ensure the home hero CTAs state is consistent
+  ensureHomeHeroCtaState();
+}
+
+// Hide/Show Home CTAs based on login state (front-end only)
+function adjustHomeHeroForAuth() {
+  const heroActions = document.querySelector('.hero-actions');
+  if (!heroActions) return;
+  if (currentUser && currentUser.fullName) {
+    heroActions.style.display = 'none';
+  } else {
+    heroActions.style.display = 'flex';
+  }
+}
+
+// Extra explicit home CTAs sync for logged-in state
+function ensureHomeHeroCtaState() {
+  const homeHeroActions = document.querySelector('#home .hero-actions');
+  if (!homeHeroActions) return;
+  if (currentUser && currentUser.fullName) {
+    homeHeroActions.style.display = 'none';
+  } else {
+    homeHeroActions.style.display = 'flex';
+  }
 }
 
 function toggleDropdown() {
@@ -354,6 +380,10 @@ function logout() {
   const mySubjectsSection = document.getElementById('my-subjects-section');
   if (mySubjectsSection) mySubjectsSection.style.display = 'none';
   
+  // Hide home CTAs on logout too
+  adjustHomeHeroForAuth();
+  ensureHomeHeroCtaState();
+
   // Hide course tabs and create button
   const courseTabs = document.getElementById('courses-tabs');
   const createCourseBtn = document.getElementById('create-course-btn');
