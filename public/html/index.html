@@ -739,18 +739,46 @@
       const uploadSelect = document.getElementById('course-subject');
       if (uploadSelect) {
         fetch(`${API_URL}/course-details`).then(r => r.json()).then(courses => {
-          uploadSelect.innerHTML = '<option value="">Select Course</option>';
-          courses.forEach(c => {
-            const o = document.createElement('option');
-            o.value = c.id;
-            o.textContent = c.title + (c.subject ? ' (' + c.subject + ')' : '');
-            uploadSelect.appendChild(o);
-          });
-        }).catch(() => {});
+          if (courses && courses.length > 0) {
+            uploadSelect.innerHTML = '<option value="">Select Course</option>';
+            courses.forEach(c => {
+              const o = document.createElement('option');
+              o.value = c.id;
+              o.textContent = c.title + (c.subject ? ' (' + c.subject + ')' : '');
+              uploadSelect.appendChild(o);
+            });
+          } else {
+            uploadSelect.innerHTML = '<option value="">No courses yet — create one first</option>';
+          }
+        }).catch(() => {
+          uploadSelect.innerHTML = '<option value="">Failed to load courses</option>';
+        });
       }
     }
 
-    function showUploadModal() { document.getElementById('upload-modal').classList.add('active'); }
+    function showUploadModal() {
+      document.getElementById('upload-modal').classList.add('active');
+      // Reload courses dropdown when modal opens
+      const uploadSelect = document.getElementById('course-subject');
+      if (uploadSelect) {
+        uploadSelect.innerHTML = '<option value="">Loading...</option>';
+        fetch(`${API_URL}/course-details`).then(r => r.json()).then(courses => {
+          if (courses && courses.length > 0) {
+            uploadSelect.innerHTML = '<option value="">Select Course</option>';
+            courses.forEach(c => {
+              const o = document.createElement('option');
+              o.value = c.id;
+              o.textContent = c.title + (c.subject ? ' (' + c.subject + ')' : '');
+              uploadSelect.appendChild(o);
+            });
+          } else {
+            uploadSelect.innerHTML = '<option value="">No courses yet — create one first</option>';
+          }
+        }).catch(() => {
+          uploadSelect.innerHTML = '<option value="">Failed to load courses</option>';
+        });
+      }
+    }
     function closeUploadModal() { document.getElementById('upload-modal').classList.remove('active'); }
 
     function showAssignModal(subjectId, studentEmail) {
