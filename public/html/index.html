@@ -730,11 +730,24 @@
 
     function loadSubjectsForSelect() {
       loadSubjects().then(subjects => {
-        ['ai-search-subject', 'course-subject'].forEach(id => {
+        ['ai-search-subject'].forEach(id => {
           const el = document.getElementById(id);
           if (el) subjects.forEach(s => { const o = document.createElement('option'); o.value = s.id; o.textContent = s.icon + ' ' + s.name; el.appendChild(o); });
         });
       });
+      // Load actual courses for the legacy upload select
+      const uploadSelect = document.getElementById('course-subject');
+      if (uploadSelect) {
+        fetch(`${API_URL}/course-details`).then(r => r.json()).then(courses => {
+          uploadSelect.innerHTML = '<option value="">Select Course</option>';
+          courses.forEach(c => {
+            const o = document.createElement('option');
+            o.value = c.id;
+            o.textContent = c.title + (c.subject ? ' (' + c.subject + ')' : '');
+            uploadSelect.appendChild(o);
+          });
+        }).catch(() => {});
+      }
     }
 
     function showUploadModal() { document.getElementById('upload-modal').classList.add('active'); }

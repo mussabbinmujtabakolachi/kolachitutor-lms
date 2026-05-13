@@ -940,10 +940,11 @@ async function uploadCourse(formData) {
       closeUploadModal();
       loadDetailedCourses();
     } else {
-      showToast('Upload failed', 'error');
+      const err = await response.json().catch(() => ({ error: 'Upload failed' }));
+      showToast(err.error || 'Upload failed', 'error');
     }
   } catch (error) {
-    showToast('Upload failed', 'error');
+    showToast('Upload failed: ' + (error.message || error), 'error');
   }
 }
 
@@ -1423,12 +1424,18 @@ function closeCreateCourseModal() {
 
 async function loadSubjectsForNewCourse() {
   const select = document.getElementById('newCourseSubject');
-  if (!select || select.options.length > 1) return;
+  if (!select) return;
+  // If already populated, skip to avoid duplicates
+  if (select.options.length > 0) return;
   
   const subjects = await loadSubjects();
+  const seen = new Set();
   subjects.forEach(s => {
+    const key = (s.id ?? s.name).toString();
+    if (seen.has(key)) return;
+    seen.add(key);
     const option = document.createElement('option');
-    option.value = s.name;
+    option.value = s.id ?? s.name;
     option.textContent = `${s.icon} ${s.name}`;
     select.appendChild(option);
   });
