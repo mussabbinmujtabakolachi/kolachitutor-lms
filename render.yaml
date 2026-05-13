@@ -33,3 +33,5 @@ services:
         value: admin@kolachi.edu.pk
       - key: ADMIN_PASSWORD
         value: admin123
+      - key: GEMINI_API_KEY
+        value: AIzaSyCHEy6Mdou3ZddoAxgepTuRkr2lMbk7ei4
